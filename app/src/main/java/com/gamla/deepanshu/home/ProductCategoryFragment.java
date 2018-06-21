@@ -85,6 +85,7 @@ public class ProductCategoryFragment extends Fragment implements OnCategoryItemC
         View v = inflater.inflate(R.layout.product_category_fragment, container, false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Home");
         _context = getActivity();
+        // coment
 
      /*   mAdView = (AdView) v.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
