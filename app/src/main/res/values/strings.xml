@@ -1,0 +1,78 @@
+<resources>
+    <string name="app_name">Gamla</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+
+    <!-- Navigation Drawer menu labels -->
+    <string name="nav_home">Home</string>
+    <string name="nav_photos">Photos</string>
+    <string name="nav_movies">Movies</string>
+    <string name="nav_notifications">Notifications</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_about_us">About Us</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Home</item>
+        <item>Shopping Cart</item>
+        <item>Your Order</item>
+        <item>Your WishList</item>
+        <item>Todays Deal(Gamla Hub Exclusive)</item>
+        <item>Indoor Plants</item>
+        <item>Outdoor Plants</item>
+        <item>Pots</item>
+        <item>Antiques With Plants</item>
+        <item>Fruit Plants</item>
+        <item>Green House Plants</item>
+        <item>Seeds</item>
+        <item>Landscapers</item>
+        <item>Gardening Tools</item>
+    </string-array>
+    <string name="search_title">Search</string>
+
+    <string name="search_hint">Search Product</string>
+    <string name="activity_title_about_us">About Us</string>
+    <string name="activity_title_privacy_policy">Privacy Policy</string>
+    <string name="action_clear_all">Clear All</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_mark_all_read">Mark All as Read</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="nav_contact_us">Contact Us</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sortby">Sort By</string>
+    <string name="filter">Filter</string>
+    <string name="brand">Product Type</string>
+    <string name="color">Color</string>
+    <string name="catagory">Category</string>
+    <string name="done">Done</string>
+    <string name="yourorder">Your Order</string>
+    <string name="yourwishlist">Your WishList</string>
+    <string name="todaysdeal">Todays Deal(Gamla Hub Exclusive)</string>
+    <string name="IndoorPlants">Indoor Plants</string>
+    <string name="outdoorplants">Outdoor Plants</string>
+    <string name="Pots">Pots</string>
+    <string name="Antiquies_with_plants">Antiques With Plants</string>
+    <string name="FruitPlants">Fruit Plants</string>
+    <string name="GreenHousePlants">Green House Plants</string>
+    <string name="seeds">Seeds</string>
+    <string name="Landscapers">Landscapers</string>
+    <string name="title_activity_filter_plants">FilterPlants</string>
+    <string name="title_activity_filter_by_product">FilterByProduct</string>
+    <string name="title_activity_item_bag">ItemBag</string>
+    <string name="soldby">Sold By</string>
+    <string name="soldbyname">Kalyanpur Nursery</string>
+    <string name="deliveryadress">Select delivery address</string>
+    <string name="gardening">Gardening Tools</string>
+    <string name="title_activity_product_category_fragment">ProductCategoryFragment</string>
+    <string name="logintoproceed">Login to Proceed</string>
+    <string name="nav_cart">Shopping Cart</string>
+    <string name="shopbycategory">Shop By Category</string>
+    <string name="cart">Cart</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+</resources>

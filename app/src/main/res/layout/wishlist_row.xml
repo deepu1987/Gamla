@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:layout_marginTop="@dimen/fab_margin"
+    android:layout_height="220dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="170dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight=".6"
+            android:orientation="vertical"
+
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/wishproductname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+                android:layout_marginRight="@dimen/fab_margin"
+                android:layout_marginLeft="@dimen/fab_margin"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:textColor="@color/black"
+                android:textSize="@dimen/textsize"
+                />
+            <TextView
+                android:id="@+id/wishadress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="by : Kayanpur"
+                android:layout_margin="@dimen/fab_margin"
+                android:textColor="@color/black"
+                android:textSize="@dimen/textsize"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight=".4"
+            android:orientation="vertical"
+            android:gravity="right"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/wishimage"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="@dimen/fab_margin"
+
+                android:layout_marginRight="@dimen/fab_margin"/>
+
+            <TextView
+                android:id="@+id/wishprice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="100 Rs"
+                android:textSize="@dimen/fab_margin"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:layout_marginTop="@dimen/fab_margin"
+                android:textColor="@color/black"
+                />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/grey"
+
+        android:layout_height="1dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/wishlistremove"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Remove"
+            android:gravity="center"
+            android:textSize="17dp"
+            android:textColor="@color/lightred"
+            android:layout_weight="1"
+            />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/grey"
+            />
+        <TextView
+            android:id="@+id/wishlistmovetobag"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="Move to Bag"
+            android:gravity="center"
+            android:textSize="17dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_weight="1"
+            />
+
+      <!--  <TextView
+            android:layout_width="0dp"
+            android:layout_weight=".8"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/fab_margin"
+            android:text="New Offers"
+            android:gravity="left|center_vertical"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/fab_margin"
+            android:textStyle="bold"
+            />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight=".2"
+            android:orientation="horizontal"
+            android:gravity="right|center_vertical"
+
+            android:layout_height="50dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_marginRight="@dimen/fab_margin"
+            android:src="@drawable/ic_chevron_right_black_24dp"
+            android:layout_height="wrap_content"
+
+            />
+        </LinearLayout>-->
+    </LinearLayout>
+
+
+
+</LinearLayout>

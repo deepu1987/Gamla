@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+          android:icon="@drawable/potted_plant"
+            android:title="@string/nav_home" />
+        <item
+            android:id="@+id/nav_cart"
+            android:icon="@drawable/potted_plant"
+            android:title="@string/nav_cart" />
+        <item
+            android:id="@+id/nav_your_order"
+            android:icon="@drawable/potted_plant"
+            android:title="@string/yourorder" />
+        <item
+            android:id="@+id/nav_wishlislist"
+            android:icon="@drawable/potted_plant"
+            android:title="@string/yourwishlist" />
+
+        <item
+            android:id="@+id/nav_todays_deal"
+            android:icon="@drawable/potted_plant"
+            android:title="@string/todaysdeal" />
+
+
+    </group>
+    <item android:title="Shop By Category">
+        <menu>
+            <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_indoorplants"
+                android:icon="@drawable/potted_plant"
+                android:title="@string/IndoorPlants" />
+            <item
+                android:id="@+id/nav_outdoorplants"
+                android:icon="@drawable/potted_plant"
+                android:title="@string/outdoorplants" />
+            <item
+                android:id="@+id/nav_Pots"
+                android:icon="@drawable/potted_plant"
+                android:title="@string/Pots" />
+            <item
+                android:id="@+id/nav_Antiquies_with_plants"
+                android:icon="@drawable/potted_plant"
+                android:title="@string/Antiquies_with_plants" />
+            <item
+                android:id="@+id/nav_FruitPlants"
+                android:icon="@drawable/potted_plant"
+                android:title="@string/FruitPlants" />
+            <item
+                android:id="@+id/nav_Greenhouse"
+                android:icon="@drawable/potted_plant"
+                android:title="@string/GreenHousePlants" />
+            <item
+                android:id="@+id/nav_seeds"
+                android:icon="@drawable/potted_plant"
+                android:title="@string/seeds" />
+            <item
+                android:id="@+id/nav_LandScaperes"
+                android:icon="@drawable/potted_plant"
+                android:title="@string/Landscapers" />
+
+                <item
+                    android:id="@+id/nav_gardening"
+                    android:icon="@drawable/potted_plant"
+                    android:title="@string/gardening" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="Others">
+        <menu>
+            <item
+                android:id="@+id/nav_about_us"
+                android:title="@string/nav_about_us" />
+            <item
+                android:id="@+id/nav_contact_us"
+                android:title="@string/nav_contact_us" />
+            <item
+                android:id="@+id/nav_privacy_policy"
+                android:title="@string/privacy_policy" />
+        </menu>
+    </item>
+
+</menu>

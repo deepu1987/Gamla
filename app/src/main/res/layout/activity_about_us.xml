@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gamla.deepanshu.gamla.AboutUs">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Our mission is to create cleaner safer neighbourhoods in which we live by working together with our neighbours to improve our local environmental quality.
+
+Because it is our commitment towards society.
+
+We are committed to working with area businesses, community groups and our neighbours to improve the place we live in and do business by implementing environmental projects that benefit our community socially and economically.
+
+We are dedicated to environmental improvements that foster a sustainable future and lead to social and economical improvements in the community we do business."
+        android:layout_margin="@dimen/fab_margin"
+        android:textSize="@dimen/fab_margin"
+        />
+
+</LinearLayout>

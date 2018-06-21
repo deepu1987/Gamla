@@ -1,0 +1,73 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context="com.gamla.deepanshu.gamla.com.gamla.deepanshu.ProductList.ProductListFragment">
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cardList"
+        android:layout_width="match_parent"
+        android:background="@color/grey"
+        android:layout_marginBottom="?attr/actionBarSize"
+
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+
+        >
+
+        <LinearLayout
+            android:id="@+id/sortby"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:layout_weight=".45"
+
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sortby"
+                android:textColor="@color/textcolor"
+                android:textSize="@dimen/textsize" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width=".5dp"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:background="@android:color/white"
+            android:gravity="center">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/filter"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:layout_weight=".45"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/filter"
+                android:textColor="@color/textcolor"
+                android:textSize="@dimen/textsize" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
