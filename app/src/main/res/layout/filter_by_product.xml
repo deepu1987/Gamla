@@ -9,7 +9,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
         android:drawableRight="@drawable/ic_search_black_24dp"
-        android:hint="Search Category"
+        android:hint="Search Product Type"
         android:textSize="18dp" />
     <LinearLayout
         android:id="@+id/data_container"

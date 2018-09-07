@@ -27,7 +27,7 @@
         <item>Pots</item>
         <item>Antiques With Plants</item>
         <item>Fruit Plants</item>
-        <item>Green House Plants</item>
+        <item>Fertilizer and Pestisides</item>
         <item>Seeds</item>
         <item>Landscapers</item>
         <item>Gardening Tools</item>
@@ -42,11 +42,13 @@
     <string name="action_mark_all_read">Mark All as Read</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="nav_contact_us">Contact Us</string>
+    <string name="rateus">Rate Us</string>
+    <string name="shareapp">Share App</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="sortby">Sort By</string>
-    <string name="filter">Filter</string>
+    <string name="filter">Filters</string>
     <string name="brand">Product Type</string>
     <string name="color">Color</string>
     <string name="catagory">Category</string>
@@ -59,7 +61,7 @@
     <string name="Pots">Pots</string>
     <string name="Antiquies_with_plants">Antiques With Plants</string>
     <string name="FruitPlants">Fruit Plants</string>
-    <string name="GreenHousePlants">Green House Plants</string>
+    <string name="Fertilizer_Pestisides">Fertilizer and Pestisides</string>
     <string name="seeds">Seeds</string>
     <string name="Landscapers">Landscapers</string>
     <string name="title_activity_filter_plants">FilterPlants</string>
@@ -75,4 +77,6 @@
     <string name="shopbycategory">Shop By Category</string>
     <string name="cart">Cart</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="title_activity_contact_us">ContactUs</string>
+    <string name="title_activity_tt">tt</string>
 </resources>

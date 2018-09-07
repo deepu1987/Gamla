@@ -50,9 +50,9 @@
                 android:icon="@drawable/potted_plant"
                 android:title="@string/FruitPlants" />
             <item
-                android:id="@+id/nav_Greenhouse"
+                android:id="@+id/nav_fertilizer"
                 android:icon="@drawable/potted_plant"
-                android:title="@string/GreenHousePlants" />
+                android:title="@string/Fertilizer_Pestisides" />
             <item
                 android:id="@+id/nav_seeds"
                 android:icon="@drawable/potted_plant"
@@ -75,11 +75,24 @@
                 android:id="@+id/nav_about_us"
                 android:title="@string/nav_about_us" />
             <item
+                android:id="@+id/nav_rate_us"
+                android:title="@string/rateus" />
+            <item
+                android:id="@+id/nav_share_app"
+                android:title="@string/shareapp" />
+            <item
                 android:id="@+id/nav_contact_us"
                 android:title="@string/nav_contact_us" />
             <item
                 android:id="@+id/nav_privacy_policy"
                 android:title="@string/privacy_policy" />
+
+            <item android:id="@+id/nav_term_condition"
+                android:title="Term and Condition"
+                />
+            <item android:id="@+id/nav_cancelation_return_policy"
+                android:title="Cancellation/Refund Policy"
+                />
         </menu>
     </item>
 

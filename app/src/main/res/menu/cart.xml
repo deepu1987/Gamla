@@ -8,4 +8,22 @@
         app:showAsAction="collapseActionView|ifRoom"
         />
 
+        <item
+            android:id="@+id/rateus"
+            android:orderInCategory="100"
+            android:title="Rate Us"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/shareapp"
+            android:orderInCategory="101"
+            android:title="Share App"
+            app:showAsAction="never" />
+    <item android:id="@+id/contactus"
+        android:orderInCategory="102"
+        android:title="Contact Us"
+        app:showAsAction="never"
+        />
+
+
 </menu>

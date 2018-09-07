@@ -22,7 +22,7 @@
 
         >
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/sortby"
             android:layout_width="0dp"
             android:layout_height="56dp"
@@ -36,10 +36,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sortby"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
                 android:textColor="@color/textcolor"
                 android:textSize="@dimen/textsize" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/sortbytext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Relevance"
+                android:textColor="@color/grey"
+                android:layout_marginBottom="8dp"
+                android:layout_gravity="bottom|center_horizontal"/>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width=".5dp"
@@ -50,24 +60,56 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/filter"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_gravity="bottom"
             android:layout_weight=".45"
-            android:background="@color/colorPrimaryDark"
             android:gravity="center"
+            android:background="@color/colorPrimaryDark"
+
 
             >
+
+            <ImageView
+                android:id="@+id/redindicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="65dp"
+               android:layout_marginBottom="8dp"
+
+                android:visibility="gone"
+                android:background="@drawable/red_dot" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
                 android:text="@string/filter"
                 android:textColor="@color/textcolor"
                 android:textSize="@dimen/textsize" />
-        </LinearLayout>
+            <TextView
+                android:id="@+id/filtertext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select"
+                android:textColor="@color/grey"
+                android:layout_marginBottom="8dp"
+                android:layout_gravity="bottom|center_horizontal"
+
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:src="@drawable/ic_keyboard_arrow_up_black_24dp"
+                />
+        </FrameLayout>
     </LinearLayout>
 
 </FrameLayout>

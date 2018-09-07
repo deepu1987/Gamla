@@ -106,6 +106,16 @@ android:layout_weight=".9"
                     android:layout_marginTop="10dp"
                     android:tag="0"
                     android:background="@drawable/white_heart" />
+
+                <ImageView
+                    android:id="@+id/shareproduct"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:tag="0"
+                    android:background="@drawable/ic_share_black_24dp" />
             </android.support.v7.widget.CardView>
             <com.ms.square.android.expandabletextview.ExpandableTextView
                 xmlns:android="http://schemas.android.com/apk/res/android"
@@ -133,11 +143,11 @@ android:layout_weight=".9"
             </com.ms.square.android.expandabletextview.ExpandableTextView>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_weight=".25"
+                android:layout_height="120dp"
+
                 android:background="@color/white"
 
-                android:paddingTop="@dimen/fab_margin"
+
                 android:orientation="vertical">
 
 
@@ -151,7 +161,7 @@ android:layout_weight=".9"
                     android:layout_marginLeft="20dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="2dp"
-                    android:text="Price  : 49 Rs"
+                    android:text="Name  : Jsmine"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
 
@@ -163,12 +173,12 @@ android:layout_weight=".9"
                     android:layout_alignStart="@+id/textView3"
                     android:layout_below="@+id/textView3"
                     android:layout_marginTop="2dp"
-                    android:text="Name : Jasmine"
+                    android:text="Price : 49 Rs"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
 
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/textView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -176,8 +186,8 @@ android:layout_weight=".9"
                     android:layout_alignStart="@+id/textView4"
                     android:layout_centerVertical="true"
                     android:text="COD is not available for this merchant" />
-
-                <TextView
+-->
+               <!-- <TextView
                     android:id="@+id/shpingfees"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -186,9 +196,9 @@ android:layout_weight=".9"
                     android:layout_toRightOf="@+id/textView5"
                     android:text="Shipping Fee : 20"
                     android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                    android:textStyle="bold" />-->
 
-                <TextView
+                <!--<TextView
                     android:id="@+id/textView7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -197,15 +207,15 @@ android:layout_weight=".9"
                     android:layout_alignTop="@+id/textView4"
                     android:text="View Detail"
                     android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                    android:textStyle="bold" />-->
 
                 <TextView
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/textView5"
-                    android:layout_alignStart="@+id/textView5"
-                    android:layout_below="@+id/textView5"
+                    android:layout_alignLeft="@+id/textView4"
+                    android:layout_alignStart="@+id/textView4"
+                    android:layout_below="@+id/textView4"
                     android:layout_marginTop="12dp"
                     android:text="Sold by" />
 
@@ -294,17 +304,30 @@ android:layout_weight=".9"
     <LinearLayout
         android:id="@+id/buy"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_height="56dp"
         android:background="@color/colorPrimaryDark"
         android:gravity="center"
 
 
         >
-
+<TextView
+    android:layout_width="0dp"
+    android:id="@+id/AddToCart"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:textColor="@color/white"
+    android:text="Add To Cart"
+    android:textSize="20dp"
+    android:layout_weight="1"
+    android:background="@android:color/holo_red_light"
+    />
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:id="@+id/buyprice"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:background="@color/colorPrimaryDark"
             android:text="Buy for Rs. 49"
             android:textColor="@android:color/white"

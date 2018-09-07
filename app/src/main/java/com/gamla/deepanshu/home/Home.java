@@ -64,6 +64,7 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
     private static final String TAG_ANTIQUIES = "Antiquies With Plants";
     private static final String TAG_FRUIT_PLANTS = "Fruit Plants";
     private static final String TAG_GREEN_HOUSE = "Green House Plants";
+    private static final String TAG_FERTILIZER = "Fertilizer and Pestisides";
     private static final String TAG_SEEDS = "Seeds";
     private static final String TAG_lANDSCAPERS = "Landscapers";
     private static final String TAG_POTS = "Pots";
@@ -74,11 +75,13 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
     private Handler mHandler;
     ArrayList<String> objUserArrayList = new ArrayList<>();
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    DatabaseHandler dh=null;
     private static final int MAKE_CALL_PERMISSION_REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+
 
         //=============================================================================//
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -105,9 +108,10 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
         };
 
         //=============================================================================//
-        DatabaseHandler dh = new DatabaseHandler(this);
+        dh = new DatabaseHandler(this);
         objUserArrayList = dh.getUserRecord();
-
+        dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+        dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
@@ -186,45 +190,65 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
             case 5:
                 // photos
                  ProductListFragment productListFragment = ProductListFragment.newInstance("Indoor Plants","");
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                 return productListFragment;
             case 6:
                 // movies fragment
                 ProductListFragment productListFragment1 = ProductListFragment.newInstance("Outdoor Plants","");
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                 return productListFragment1;
             case 7:
                 // notifications fragment
                 ProductListFragment productListFragment2 = ProductListFragment.newInstance("Pots","");
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                 return productListFragment2;
             case 8:
                 // notifications fragment
                 ProductListFragment productListFragment7 = ProductListFragment.newInstance("Antiquies With Plants","");
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                 return productListFragment7;
 
             case 9:
                 // settings fragment
                 ProductListFragment productListFragment3 = ProductListFragment.newInstance("Fruit Plants","");
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                 return productListFragment3;
             case 10:
                 // movies fragment
-                ProductListFragment productListFragment4 = ProductListFragment.newInstance("Green House Plants","");
+                ProductListFragment productListFragment4 = ProductListFragment.newInstance("Fertilizer and Pestisides","");
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                 return productListFragment4;
             case 11:
                 // notifications fragment
                 ProductListFragment productListFragment5 = ProductListFragment.newInstance("Seeds","");
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                 return productListFragment5;
 
             case 12:
                 // settings fragment
                 ProductListFragment productListFragment6 = ProductListFragment.newInstance("Landscapers","");
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                 return productListFragment6;
             case 13:
                 // settings fragment
                 ProductListFragment productListFragment8 = ProductListFragment.newInstance("Gardening Tools","");
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                 return productListFragment8;
 
 
             default:
                 ProductCategoryFragment pFragment1 = new ProductCategoryFragment();
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                 return pFragment1;
         }
     }
@@ -250,12 +274,15 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.nav_home:
                       //  Toast.makeText(Home.this,"hello00",Toast.LENGTH_SHORT).show();
+                        dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_HOME;
                         break;
                     case R.id.nav_wishlislist:
                         navItemIndex = 3;
                         DatabaseHandler dh = new DatabaseHandler(Home.this);
+                        dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                        dh.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                         ArrayList<String> objArrylist;
                         objArrylist = dh.getUserRecord();
                         if(objArrylist.size()>0) {
@@ -276,6 +303,8 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
                     case R.id.nav_cart:
                         navItemIndex = 1;
                         DatabaseHandler dh1 = new DatabaseHandler(Home.this);
+                        dh1.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                        dh1.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                         ArrayList<String> objArrylist1;
                         objArrylist1 = dh1.getUserRecord();
                         if(objArrylist1.size()>0) {
@@ -295,12 +324,15 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
                     case R.id.nav_your_order:
                         navItemIndex = 2;
                         DatabaseHandler dh2 = new DatabaseHandler(Home.this);
+                        dh2.deleteTable(DatabaseHandler.TABLE_FILTER_PRODUCT_TYPE);
+                        dh2.deleteTable(DatabaseHandler.TABLE_FILTER_PRICE_VALUE);
                         ArrayList<String> objArrylist2;
                         objArrylist2 = dh2.getUserRecord();
                         if(objArrylist2.size()>0) {
 
                             drawer.closeDrawers();
-                            startActivityForResult(new Intent(Home.this,MyOrder.class),101);
+                            finish();
+                            startActivity(new Intent(Home.this,MyOrder.class));
                             overridePendingTransition(R.anim.left_to_right,R.anim.hold);
                         }
                         else
@@ -331,9 +363,9 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
                         navItemIndex = 9;
                         CURRENT_TAG = TAG_FRUIT_PLANTS;
                         break;
-                    case R.id.nav_Greenhouse:
+                    case R.id.nav_fertilizer:
                         navItemIndex = 10;
-                        CURRENT_TAG = TAG_GREEN_HOUSE;
+                        CURRENT_TAG = TAG_FERTILIZER;
                         break;
                     case R.id.nav_seeds:
                         navItemIndex = 11;
@@ -353,16 +385,35 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
                         drawer.closeDrawers();
                         return true;
 
+                    case R.id.nav_rate_us:
+                        // launch new intent instead of loading fragment
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=PackageName")));
+                        drawer.closeDrawers();
+                        return true;
+
+                    case R.id.nav_share_app:
+                        // launch new intent instead of loading fragment
+                        try {
+                            Intent i = new Intent(Intent.ACTION_SEND);
+                            i.setType("text/plain");
+                            i.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                            String sAux = "\nLet me recommend you this application\n\n";
+                            sAux = sAux + "https://play.google.com/store/apps/details?id=the.package.id \n\n";
+                            i.putExtra(Intent.EXTRA_TEXT, sAux);
+                            startActivity(Intent.createChooser(i, "choose one"));
+                        } catch(Exception e) {
+                            //e.toString();
+                        }
+                        drawer.closeDrawers();
+                        return true;
+
                     case R.id.nav_contact_us:
                         // launch new intent instead of loading fragment
                      //   startActivity(new Intent(Home.this, AboutUs.class));
 
-                        if (checkPermission(Manifest.permission.CALL_PHONE)) {
-                            String dial = "tel:7991898496";
-                            startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
-                        } else {
-                            Toast.makeText(Home.this, "Permission Call Phone denied", Toast.LENGTH_SHORT).show();
-                        }
+                        Intent contactus = new Intent(Home.this,ContactUs.class);
+                        startActivityForResult(contactus,102);
+                        overridePendingTransition(R.anim.slide_down,R.anim.hold);
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_privacy_policy:
@@ -463,6 +514,27 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
                 System.out.println("------------------------------>>>"+item.getItemId());
                 Intent i = new Intent(Home.this,ItemBag.class);
                 startActivityForResult(i,101);
+                overridePendingTransition(R.anim.slide_down,R.anim.hold);
+                return true;
+            case R.id.rateus:   //this item has your app icon
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=PackageName")));
+                return true;
+            case R.id.shareapp:   //this item has your app icon
+                try {
+                    Intent shareintent = new Intent(Intent.ACTION_SEND);
+                    shareintent.setType("text/plain");
+                    shareintent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                    String sAux = "\nLet me recommend you this application\n\n";
+                    sAux = sAux + "https://play.google.com/store/apps/details?id=the.package.id \n\n";
+                    shareintent.putExtra(Intent.EXTRA_TEXT, sAux);
+                    startActivity(Intent.createChooser(shareintent, "choose one"));
+                } catch(Exception e) {
+                    //e.toString();
+                }
+                return true;
+            case R.id.contactus:   //this item has your app icon
+                Intent contactus = new Intent(Home.this,ContactUs.class);
+                startActivityForResult(contactus,102);
                 overridePendingTransition(R.anim.slide_down,R.anim.hold);
                 return true;
 

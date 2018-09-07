@@ -6,8 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.gamla.deepanshu.ProductList.PlantsFilterByCategoryObject;
 import com.gamla.deepanshu.ProductList.ProductlistBean;
 import com.gamla.deepanshu.DeliveryAdress.AdressBean;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -17,13 +21,17 @@ import java.util.ArrayList;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSON = 4;
-    public static final String DATABASE_NAME = "Gamla3.db";
+    public static final String DATABASE_NAME = "Gamla1.db";
     public static String TABLE_CART = "Cart";
     public static String TABLE_USER = "User";
     public static String TABLE_ADDRESS = "Address";
+    public static String TABLE_FILTER_PRODUCT_TYPE = "FilterProductType";
+    public static String TABLE_FILTER_PRICE_VALUE = "FilterPriceValue";
     public Context _context;
 
     public static final String KEY_ID = "id";
+    public static final String KEY_PRODUCT_TYPE_NAME = "ProductTypeName";
+    public static final String KEY_IS_SELECTED = "IsSelected";
     public static final String KEY_PRODUCT_ID = "ProductID";
     public static final String KEY_SKU_ID = "SkuId";
     public static final String KEY_PRODUCTCATEGORY = "ProductCategory";
@@ -54,6 +62,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String KEY_FULL_NAME = "FullName";
     public static final String KEY_ADRESS_LINE1 ="AdressLine1";
     public static final String KEY_ADRESS_LINE2 = "AdressLine2";
+
+    public static final String KEY_MIN_PRICE_VALUE = "MinPrice";
+    public static final String KEY_MAX_PRICE_VALUE = "MaxPrice";
+    public static final String KEY_SELECTED_MIN_VALUE = "SelectedMinValue";
+    public static final String KEY_SELECTED_MAX_VALUE = "SelectedMaxValue";
+
 
 
 
@@ -87,9 +101,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +KEY_USER_NAME+" TEXT,"+KEY_USER_PASSWORD+" TEXT"+")";
         db.execSQL(CREATE_USER_TABLE);
 
+        String CREATE_PRODUCT_TYPE_TABLE = "CREATE TABLE "+ TABLE_FILTER_PRODUCT_TYPE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +KEY_PRODUCT_TYPE_NAME+" TEXT,"+KEY_IS_SELECTED+" TEXT"+")";
+        db.execSQL(CREATE_PRODUCT_TYPE_TABLE);
+
         String CREATE_USER_ADRESS = "CREATE TABLE "+ TABLE_ADDRESS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +KEY_FULL_NAME+" TEXT,"+KEY_MOBILE_NUMBER+" TEXT,"+KEY_PIN_CODE+" TEXT,"+KEY_ADRESS_LINE1+" TEXT,"+KEY_ADRESS_LINE2+" TEXT,"+KEY_CITY+" TEXT,"+KEY_STATE+" TEXT, "+KEY_STATUS+" TEXT "+")";
         db.execSQL(CREATE_USER_ADRESS);
+
+        String CREATE_FILTER_PRICE_TABLE = "CREATE TABLE "+ TABLE_FILTER_PRICE_VALUE + "("
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +KEY_MIN_PRICE_VALUE+" TEXT,"+KEY_MAX_PRICE_VALUE+" TEXT,"+KEY_SELECTED_MIN_VALUE+" TEXT,"+KEY_SELECTED_MAX_VALUE+" TEXT"+")";
+        db.execSQL(CREATE_FILTER_PRICE_TABLE);
 
 
     }
@@ -99,6 +121,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CART);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ADDRESS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FILTER_PRODUCT_TYPE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FILTER_PRICE_VALUE);
 
     }
     public void savecartRecord(ProductlistBean obj) {
@@ -148,7 +172,123 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         db.close();
     }
+   public void UpdateProductTypeRecord(String name)
+   {
+       SQLiteDatabase db = this.getWritableDatabase();
+       ContentValues values;
+        values = new ContentValues();
+        values.put(KEY_IS_SELECTED,"false");
+        db.update(TABLE_FILTER_PRODUCT_TYPE, values, KEY_PRODUCT_TYPE_NAME + " = '" + name+"'", null);
+       db.close();
+   }
+   public void UpdateProductStatus(JSONArray objArray)
+   {
+       SQLiteDatabase db = this.getWritableDatabase();
+       ContentValues values;
+       for(int i=0;i<objArray.length();i++) {
+           try {
+               JSONObject obj = objArray.getJSONObject(i);
+               values = new ContentValues();
+               values.put(KEY_STATUS,obj.getString("Status"));
+               db.update(TABLE_CART,values,KEY_PRODUCT_ID+" = '"+obj.getString("ProductId")+"'",null);
+           }
+           catch (Exception e)
+           {
+               e.printStackTrace();
+           }
 
+       }
+       db.close();
+
+
+
+   }
+    public ArrayList<String> getSelectedProductTypeRecord()
+    {
+        SQLiteDatabase db = null;
+        ArrayList<String> objArrylist = new ArrayList<>();
+        Cursor c=null;
+        try{
+           db = this.getReadableDatabase();
+           String var = "true";
+           String query = "Select * From "+TABLE_FILTER_PRODUCT_TYPE+" Where "+KEY_IS_SELECTED + " = '"+var+"'";
+           System.out.println("update querty------------->"+query);
+           c = db.rawQuery(query,null);
+           if(c!=null)
+           {
+               if(c.moveToFirst()) {
+                   do {
+                       objArrylist.add(c.getString(c.getColumnIndex(KEY_PRODUCT_TYPE_NAME)));
+                   }
+                   while (c.moveToNext());
+               }
+           }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally {
+            if(c!=null)
+            {
+                c.close();
+            }
+            db.close();
+        }
+        return objArrylist;
+    }
+    public void SaveProductTypeRecord(ArrayList<PlantsFilterByCategoryObject> objArrylist)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values;
+        PlantsFilterByCategoryObject obj;
+        for(int i=0;i<objArrylist.size();i++) {
+            values = new ContentValues();
+            obj = objArrylist.get(i);
+            values.put(KEY_PRODUCT_TYPE_NAME,obj.get_name());
+            values.put(KEY_IS_SELECTED,obj.isSelected()+"");
+            db.insertOrThrow(TABLE_FILTER_PRODUCT_TYPE,null,values);
+        }
+        db.close();
+    }
+    public ArrayList<PlantsFilterByCategoryObject> getProdyctTypeRecord()
+    {
+        SQLiteDatabase db = null;
+        ArrayList<PlantsFilterByCategoryObject> objArraylist = new ArrayList<>();
+        PlantsFilterByCategoryObject obj;
+        Cursor c =null;
+        try{
+            db = this.getReadableDatabase();
+            String query = "Select * From "+TABLE_FILTER_PRODUCT_TYPE;
+            c = db.rawQuery(query,null);
+            if(c!=null)
+            {
+                if(c.moveToFirst())
+                {
+                    do{
+                        obj = new PlantsFilterByCategoryObject();
+                        obj.set_name(c.getString(c.getColumnIndex(KEY_PRODUCT_TYPE_NAME)));
+                        obj.setSelected(Boolean.parseBoolean(c.getString(c.getColumnIndex(KEY_IS_SELECTED))));
+                        objArraylist.add(obj);
+                    }
+                    while (c.moveToNext());
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally {
+            if(c!=null)
+            {
+                c.close();
+            }
+            db.close();
+        }
+     return objArraylist;
+
+    }
     public ArrayList<String> getUserRecord()
     {
         ArrayList<String> objArraylist = new ArrayList<String>();
@@ -312,6 +452,63 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             values.put(KEY_STATE,objBean.get_state());
             values.put(KEY_STATUS,objBean.get_status());
             db.insert(TABLE_ADDRESS,null,values);
+        db.close();
+    }
+    public void SaveFilterPriceRecord(String minvalue,String maxvalue,String selectedminValue,String selectedmaxvalue)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+            values.put(KEY_MIN_PRICE_VALUE,minvalue);
+            values.put(KEY_MAX_PRICE_VALUE,maxvalue);
+            values.put(KEY_SELECTED_MIN_VALUE,selectedminValue);
+            values.put(KEY_SELECTED_MAX_VALUE,selectedmaxvalue);
+            db.insert(TABLE_FILTER_PRICE_VALUE,null,values);
+        db.close();
+    }
+    public ArrayList<String> GetFilterPriceValue ()
+    {
+        SQLiteDatabase db = null;
+        Cursor c = null;
+        ArrayList<String> objArrayList = new ArrayList<>();
+        try{
+            db = this.getReadableDatabase();
+            String query = "Select * From "+TABLE_FILTER_PRICE_VALUE;
+            c = db.rawQuery(query,null);
+            if(c!=null)
+            {
+                if(c.moveToFirst())
+                {
+                    do{
+                       objArrayList.add(c.getString(c.getColumnIndex(KEY_MIN_PRICE_VALUE)));
+                       objArrayList.add(c.getString(c.getColumnIndex(KEY_MAX_PRICE_VALUE)));
+                       objArrayList.add(c.getString(c.getColumnIndex(KEY_SELECTED_MIN_VALUE)));
+                       objArrayList.add(c.getString(c.getColumnIndex(KEY_SELECTED_MAX_VALUE)));
+                    }
+                    while(c.moveToNext());
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally {
+            if(c!=null)
+            {
+                c.close();
+            }
+            db.close();
+        }
+        return objArrayList;
+    }
+    public void UpdateSelectedMinAndMaxValue(String minselectedValue,String maxSelectedValue)
+    {
+        System.out.println("minvalue----------->"+minselectedValue+" mac value------------>"+maxSelectedValue);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_SELECTED_MIN_VALUE,minselectedValue);
+        values.put(KEY_SELECTED_MAX_VALUE,maxSelectedValue);
+        db.update(TABLE_FILTER_PRICE_VALUE,values,null,null);
         db.close();
     }
     public void UpdateAddressStatus(String id,String status)

@@ -158,6 +158,16 @@ public class ItemBagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             itemViewHolder.txttotalprice.setText(totalprice+" Rs.");
             itemViewHolder.txtprice.setText(obj.get_sellingPrice()+" Rs.");
             itemViewHolder.txtname.setText(obj.get_productName());
+            itemViewHolder.txtStatus.setText(obj.get_status());
+            if(obj.get_status().equalsIgnoreCase("In Stock"))
+            {
+                itemViewHolder.txtStatus.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_soild_green_textview));
+            }
+            else
+            {
+                itemViewHolder.txtStatus.setBackground(context.getResources().getDrawable(R.drawable.rounded_corner_red_textview));
+
+            }
             System.out.println("quantatity------------------------------>"+Integer.parseInt(obj.get_quantatity()));
             itemViewHolder.numberPicker.setValue(Integer.parseInt(obj.get_productPurchaseQuantatity()));
             itemViewHolder.numberPicker.setValueChangedListener(new ValueChangedListener() {
@@ -274,7 +284,7 @@ public class ItemBagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
     public  class ItemBagViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView ivimage;
-        TextView txtprice,txttotalprice,txtname,txtSoldBy,txtremove,txtmoveToWishList;
+        TextView txtprice,txttotalprice,txtname,txtSoldBy,txtremove,txtmoveToWishList,txtStatus;
         com.travijuu.numberpicker.library.NumberPicker numberPicker;
         public ItemBagViewHolder(View v) {
 
@@ -288,6 +298,7 @@ public class ItemBagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             txtSoldBy = v.findViewById(R.id.soldbybag);
             txtremove = v.findViewById(R.id.removefromcart);
             txtmoveToWishList = v.findViewById(R.id.movetowishlist);
+            txtStatus = v.findViewById(R.id.productstatus);
             v.setOnClickListener(this);
 
         }

@@ -23,8 +23,12 @@
           }
         },
         {
-          "client_id": "607014684678-qvdpedaq620m1c725m7t14va4ve6s9mg.apps.googleusercontent.com",
-          "client_type": 3
+          "client_id": "607014684678-3bobtfe30ab20t5p9rqujicmcm4ghbp7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gamla.deepanshu.gamla",
+            "certificate_hash": "d77c1e62c8fb01accf7800282c84685ed419dc51"
+          }
         },
         {
           "client_id": "607014684678-qvdpedaq620m1c725m7t14va4ve6s9mg.apps.googleusercontent.com",
@@ -48,6 +52,37 @@
               "client_type": 3
             }
           ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:607014684678:android:148d0146b0a53608",
+        "android_client_info": {
+          "package_name": "com.gamla.deepanshu.home"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "607014684678-qvdpedaq620m1c725m7t14va4ve6s9mg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9XVhqUulGVCW2JNa2KXONjLdcd3xZRh4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

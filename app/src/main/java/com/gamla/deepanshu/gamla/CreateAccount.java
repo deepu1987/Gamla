@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -112,6 +113,8 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
                         @Override
                         public void onResponse(String s) {
                             progressDialog.dismiss();
+
+                            System.out.println("testing------------------->"+s);
                             if(s.equals("true")){
                                 Toast.makeText(CreateAccount.this, "Registration Successful", Toast.LENGTH_LONG).show();
                                 try {
@@ -163,6 +166,10 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
                         }
                     };
 
+                    request.setRetryPolicy(new DefaultRetryPolicy(
+                            Utility.TimedOutTimeInMiliSec,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
                     rQueue.add(request);
                     progressDialog = new ProgressDialog(CreateAccount.this);
@@ -268,6 +275,10 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
                 };
 
                 //Adding the request to the queue
+                stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                        Utility.TimedOutTimeInMiliSec,
+                        DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                        DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 rQueue.add(stringRequest);
             }
         });

@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -99,8 +100,8 @@ public class ProductCategoryFragment extends Fragment implements OnCategoryItemC
         rccategoryList = v.findViewById(R.id.shopbycategory);
         rcpromotionList = v.findViewById(R.id.promotionslider);
 
-        vp_slider = (ViewPager) v.findViewById(R.id.vp_top_slider);
-        ll_dots = (LinearLayout) v.findViewById(R.id.ll_top_dots);
+        vp_slider =  v.findViewById(R.id.vp_top_slider);
+        ll_dots =  v.findViewById(R.id.ll_top_dots);
         initPremuiumSlider();
 
         initCategory();
@@ -250,6 +251,10 @@ public class ProductCategoryFragment extends Fragment implements OnCategoryItemC
         };
 
         //Adding the request to the queue
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                Utility.TimedOutTimeInMiliSec,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         rQueue.add(stringRequest);
 
 
@@ -362,6 +367,10 @@ public class ProductCategoryFragment extends Fragment implements OnCategoryItemC
             };
 
             //Adding the request to the queue
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                Utility.TimedOutTimeInMiliSec,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             rQueue.add(stringRequest);
 
     }

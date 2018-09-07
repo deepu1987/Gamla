@@ -1,14 +1,18 @@
 package com.gamla.deepanshu.ProductDetail;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,6 +24,7 @@ import android.widget.Toast;
 
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -32,6 +37,7 @@ import com.gamla.deepanshu.ShoppingCart.ItemBag;
 import com.gamla.deepanshu.gamla.Login;
 import com.gamla.deepanshu.gamla.R;
 import com.gamla.deepanshu.Function.Utility;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.ArrayList;
@@ -51,7 +57,7 @@ public class PlantsGallary extends AppCompatActivity{
     ImageView imgWishlist;
     LinearLayout llBuy;
     ProductlistBean obj;
-    TextView txtprice,txtname,txtbuyprice,txtsoldby;
+    TextView txtprice,txtname,txtbuyprice,txtsoldby,txtAddToCart;
     ExpandableTextView expTv1;
     FrameLayout shopingcarticon;
     TextView txtshopingcart;
@@ -59,6 +65,7 @@ public class PlantsGallary extends AppCompatActivity{
     int rowcount=0;
     RequestQueue rQueue;
     ArrayList<String> objArrylistuser=new ArrayList<>();
+    private Context _context;
 
 
     @Override
@@ -67,6 +74,11 @@ public class PlantsGallary extends AppCompatActivity{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.plants_gallary);
+
+
+
+
+        _context = this;
         rQueue = Volley.newRequestQueue(this);
         dh = new DatabaseHandler(this);
 
@@ -124,6 +136,7 @@ public class PlantsGallary extends AppCompatActivity{
         imgWishlist = (ImageView) findViewById(R.id.wishlistimage);
         txtname = findViewById(R.id.textView3);
         txtprice = findViewById(R.id.textView4);
+        txtAddToCart = findViewById(R.id.AddToCart);
         txtbuyprice = findViewById(R.id.buyprice);
         llBuy = findViewById(R.id.buy);
         txtsoldby = findViewById(R.id.soldbyproduct);
@@ -203,6 +216,26 @@ public class PlantsGallary extends AppCompatActivity{
                 Intent i = new Intent(PlantsGallary.this,ItemBag.class);
                 startActivityForResult(i,101);
                 overridePendingTransition(R.anim.puul_up_from_bottom,R.anim.hold);
+            }
+        });
+        txtAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseHandler dh = new DatabaseHandler(_context);
+
+                obj.set_productPurchaseQuantatity("1");
+                try {
+                    dh.savecartRecord(obj);
+                    Toast.makeText(_context, "Product Added to Cart", Toast.LENGTH_SHORT).show();
+                    rowcount = dh.getRowCount(DatabaseHandler.TABLE_CART);
+                    txtshopingcart.setText(rowcount+"");
+
+                }
+                catch (Exception e)
+                {
+                    //e.printStackTrace();
+                    Toast.makeText(_context, "Product already added to cart", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         slider_image_list = new ArrayList<>();
@@ -289,6 +322,10 @@ public class PlantsGallary extends AppCompatActivity{
         };
 
         //Adding the request to the queue
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                Utility.TimedOutTimeInMiliSec,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         rQueue.add(stringRequest);
     }
     private void RemoveFromWishList(){
@@ -336,6 +373,10 @@ public class PlantsGallary extends AppCompatActivity{
         };
 
         //Adding the request to the queue
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                Utility.TimedOutTimeInMiliSec,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         rQueue.add(stringRequest);
     }
     private void  getwishlistOrNot()

@@ -12,23 +12,29 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.gamla.deepanshu.Database.DatabaseHandler;
 import com.gamla.deepanshu.ProductDetail.PlantsGallary;
 import com.gamla.deepanshu.gamla.R;
 import com.gamla.deepanshu.Function.Utility;
@@ -59,7 +65,7 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private LinearLayout llsortby,llfilter;
+    private FrameLayout llfilter,llsortby;
     private OnFragmentInteractionListener mListener;
     private onPlantsItemClickListner mClicklistner;
     CharSequence [] items = {"None","Price : High to Low","Price : Low to High"};
@@ -74,6 +80,12 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
     int rowcount;
     String productid;
     String discount;
+    TextView txtSortByText,txtFilterBYTexrt;
+    DatabaseHandler dh;
+    String FilterQuery = "";
+    String FilterPriceQuery = "";
+    ArrayList<String> objArraylist = new ArrayList<>();
+    ImageView ivRedIndicator;
     public ProductListFragment() {
         // Required empty public constructor
     }
@@ -119,6 +131,10 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
         rQueue = Volley.newRequestQueue(getActivity());
         llsortby = v.findViewById(R.id.sortby);
         llfilter = v.findViewById(R.id.filter);
+        txtSortByText = v.findViewById(R.id.sortbytext);
+        txtFilterBYTexrt = v.findViewById(R.id.filtertext);
+        ivRedIndicator = v.findViewById(R.id.redindicator);
+        dh = new DatabaseHandler(getActivity());
         //init();
         Bundle bundle = getArguments();
         String headervalue = bundle.getString("Header Value");
@@ -132,7 +148,7 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
         llm.setOrientation(GridLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         recList.addOnScrollListener(createInfiniteScrollListener());
-        FetchProductFromServer(0,"",limitstart,limitend);
+        FetchProductFromServer(0,"","","",limitstart,limitend);
 
 
 
@@ -147,9 +163,22 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 dialog.dismiss();
                                 int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+
                                 checkedSortItem = selectedPosition;
+                                if(checkedSortItem==0)
+                                {
+                                   txtSortByText.setText("Relevance");
+                                }
+                                else if(checkedSortItem==1)
+                                {
+                                    txtSortByText.setText("Price: High To Low");
+                                }
+                                else
+                                {
+                                    txtSortByText.setText("Price: Low To High");
+                                }
                                 plantArrayList = new ArrayList<>();
-                                FetchProductFromServer(checkedSortItem,"",0,limitstart);
+                                FetchProductFromServer(checkedSortItem,"",FilterQuery,FilterPriceQuery,0,limitstart);
                                 // Do something useful withe the position of the selected radio button
                             }
                         })
@@ -161,6 +190,7 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getActivity(),FilterPlants.class);
+                i.putExtra("category",mParam1);
                 startActivityForResult(i,101);
                 getActivity().overridePendingTransition(R.anim.puul_up_from_bottom, R.anim.hold);
             }
@@ -168,7 +198,7 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
         return v;
     }
 
-    private void FetchProductFromServer(int pos, final String Search, final int limitstart1, final int limitend1)
+    private void FetchProductFromServer(int pos, final String Search, final String filterQqery ,final String filterpricequery, final int limitstart1, final int limitend1)
     {
 
 
@@ -220,31 +250,23 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
                                         objBean.set_state(obj.getString("State"));
                                         rowcount = Integer.parseInt(obj.getString("rowcount"));
                                         plantArrayList.add(objBean);
-
-
                                     }
-
                                 }
                                 catch (Exception e)
                                 {
 
                                 }
-
-
-
                             }
                             limitstart = limitstart+15;
                             PlantsAdapter ca = new PlantsAdapter(plantArrayList,getActivity().getApplicationContext(),discount);
                             ca.setonClickListner(mClicklistner);
                             recList.setAdapter(ca);
-
                             loading.dismiss();
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
                             Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }){
@@ -258,6 +280,8 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
                         obj.put("productid",productid);
                         obj.put("Sort",checkedSortItem);
                         obj.put("Search",Search);
+                        obj.put("filterpricequery",filterpricequery);
+                        obj.put("filterQuery",filterQqery);
                         obj.put("limitstart",limitstart1+"");
                         obj.put("limitend",limitend1+"");
                     }
@@ -275,6 +299,10 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
             };
 
             //Adding the request to the queue
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                Utility.TimedOutTimeInMiliSec,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             rQueue.add(stringRequest);
 
 
@@ -296,7 +324,7 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
                 // when new items are loaded, combine old and new items, pass them to your adapter
                 // and call refreshView(...) method from InfiniteScrollListener class to refresh RecyclerView
                 if(limitstart<rowcount) {
-                    FetchProductFromServer(0,"",limitstart,limitend);
+                    FetchProductFromServer(0,"","","",limitstart,limitend);
                     refreshView(recList, null, firstVisibleItemPosition);
                 }
             }
@@ -376,16 +404,68 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
                     String SerachString = "%"+newText+"%";
                     String Searchquery =  "and ProductName Like '"+SerachString+"'";
                     plantArrayList = new ArrayList<>();
-                    FetchProductFromServer(checkedSortItem,Searchquery,limitstart,limitend);
+                    FetchProductFromServer(checkedSortItem,Searchquery,FilterQuery,FilterPriceQuery,limitstart,limitend);
                 }
                 else
                 {
                     plantArrayList = new ArrayList<>();
-                    FetchProductFromServer(checkedSortItem,newText,limitstart,limitend);
+                    FetchProductFromServer(checkedSortItem,newText,FilterQuery,FilterPriceQuery,limitstart,limitend);
                 }
 
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        String minvalue = data.getStringExtra("minvalue");
+        String maxvalue = data.getStringExtra("maxvalue");
+
+
+        objArraylist = dh.getSelectedProductTypeRecord();
+        limitstart=0;
+        String s ="";
+        if(objArraylist.size()>0)
+        {
+
+            txtFilterBYTexrt.setText("Product Type");
+
+            for (int i=0;i<objArraylist.size();i++) {
+                  if(i<objArraylist.size()-1) {
+                      s = s + "'"+objArraylist.get(i)+"'" + ",";
+                  }
+                  else
+                  {
+                      s = s + "'"+objArraylist.get(i)+"'";
+                  }
+
+            }
+
+            ivRedIndicator.setVisibility(View.VISIBLE);
+            FilterQuery = "and ProductName IN("+s+")";
+            FilterPriceQuery = "and (SellingPrice BETWEEN "+minvalue+" And "+maxvalue+")";
+            System.out.println("!!!!!!!!!!!!!!!!!==========>"+FilterQuery);
+            plantArrayList = new ArrayList<>();
+            FetchProductFromServer(checkedSortItem,"",FilterQuery,FilterPriceQuery,limitstart,limitend);
+        }
+        else
+        {
+            ivRedIndicator.setVisibility(View.GONE);
+            txtFilterBYTexrt.setText("Select");
+            FilterQuery = "";
+            if(minvalue!=null&&maxvalue!=null)
+            {
+                FilterPriceQuery = "and (SellingPrice BETWEEN "+minvalue+" And "+maxvalue+")";
+            }
+            else{
+                FilterPriceQuery = "";
+            }
+
+            System.out.println("filter proce query==========>"+FilterPriceQuery);
+            plantArrayList = new ArrayList<>();
+            FetchProductFromServer(checkedSortItem,"",FilterQuery,FilterPriceQuery,limitstart,limitend);
+        }
     }
 }

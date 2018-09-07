@@ -24,7 +24,7 @@ import java.util.List;
 
 public class Utility {
 
-    public static final String BaseURl = "http://10.0.2.2:8081/GamlaHub/rest/GamlaService/";
+    public static final String BaseURl = "http://10.0.2.2:8080/GamlaHub/rest/GamlaService/";
    // public static final String BaseURl = "http://172.25.141.199:8081/GamlaHub/rest/GamlaService/";
 
 
@@ -42,11 +42,12 @@ public class Utility {
     public static final String PREMIUM_PROMOTION_PRODUCT = BaseURl+"PremiumPromotionProduct";
     public static final String REMOVE_FROM_WISHLIST = BaseURl+"RemoveFromWishList";
     public static final String REGISTRATIONIDFORFCM = BaseURl+"RegistrationForFCM";
-
+    public static final String PRODUCTTYPE = BaseURl+"ProductType";
+    public static final String FETCH_MIN_AND_MAX_PRICE = BaseURl+"GetMinAndMaxPrice";
+    public static final String CHECK_ORDER_STAUS = BaseURl+"CheckProductStatus";
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     public static final String ORDERPLACED = "Order Placed";
-
-
+    public static final int TimedOutTimeInMiliSec = 60000;
     public static boolean checkPermission(final Context context)
     {
         int currentAPIVersion = Build.VERSION.SDK_INT;
