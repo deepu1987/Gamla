@@ -3,6 +3,7 @@ package com.gamla.deepanshu.ProductList;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,7 +29,9 @@ import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListen
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 import com.gamla.deepanshu.Database.DatabaseHandler;
 import com.gamla.deepanshu.Function.Utility;
+import com.gamla.deepanshu.ProductDetail.PlantsGallary;
 import com.gamla.deepanshu.gamla.R;
+import com.sdsmdg.tastytoast.TastyToast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,6 +39,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class FilterPlants extends AppCompatActivity {
 
@@ -178,7 +184,13 @@ public class FilterPlants extends AppCompatActivity {
     private void FetchMinAndMaxPrice()
     {
         {
-            final ProgressDialog loading = ProgressDialog.show(FilterPlants.this, "Gamla", "Please wait...", false,false);
+           // final ProgressDialog loading = ProgressDialog.show(FilterPlants.this, "Gamla", "Please wait...", false,false);
+            final ACProgressFlower dialog = new ACProgressFlower.Builder(FilterPlants.this)
+                    .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                    .themeColor(Color.WHITE)
+
+                    .fadeColor(Color.DKGRAY).build();
+            dialog.show();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.FETCH_MIN_AND_MAX_PRICE,
                     new Response.Listener<String>() {
                         @Override
@@ -186,28 +198,34 @@ public class FilterPlants extends AppCompatActivity {
                             System.out.println("res------------->"+response);
                             String res = response+"";
                             if(res.contains("false")){
-                                loading.dismiss();
+                                dialog.dismiss();
                                 //Toast.makeText(FilterPlants.this, "Record not avilable", Toast.LENGTH_SHORT).show();
 
                             }else{
+                                try {
+                                    String[] pricearray = res.split(",");
+                                    minprice = pricearray[0];
+                                    maxprice = pricearray[1];
+                                    rangeSeekbar.setMinValue(Float.parseFloat(minprice));
+                                    rangeSeekbar.setMaxValue(Float.parseFloat(maxprice));
 
-                              String [] pricearray = res.split(",");
-                              minprice = pricearray[0];
-                              maxprice = pricearray[1];
-                              rangeSeekbar.setMinValue(Float.parseFloat(minprice));
-                              rangeSeekbar.setMaxValue(Float.parseFloat(maxprice));
-
-                              tvMin.setText(minprice);
-                              tvMax.setText(maxprice);
-                              dh.SaveFilterPriceRecord(minprice,maxprice,minprice,maxprice);
+                                    tvMin.setText(minprice);
+                                    tvMax.setText(maxprice);
+                                    dh.SaveFilterPriceRecord(minprice, maxprice, minprice, maxprice);
+                                }
+                                catch(Exception e)
+                                {
+                                   e.printStackTrace();
+                                }
                             }
-                            loading.dismiss();
+                            dialog.dismiss();
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(FilterPlants.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(FilterPlants.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                            TastyToast.makeText(getApplicationContext(),  error.getMessage(), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                         }
                     }){
                 @Override

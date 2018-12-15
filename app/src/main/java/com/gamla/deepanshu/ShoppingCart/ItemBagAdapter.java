@@ -132,8 +132,8 @@ public class ItemBagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 e.printStackTrace();
             }
             footerHolder.txtSubTotal.setText(totalPrice+" Rs.");
-            footerHolder.txtShipping.setText(shipping+" Rs.");
-            footerHolder.txtTotal.setText(finalprice+" Rs.");
+            footerHolder.txtShipping.setText("0 Rs");
+            footerHolder.txtTotal.setText(totalPrice+" Rs.");
             footerHolder.txtAdress.setText(address);
             footerHolder.txtMobilenumber.setText(mobilenumber);
             footerHolder.btnChangeAdress.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +154,7 @@ public class ItemBagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else if (holder instanceof ItemBagViewHolder) {
             final ItemBagViewHolder itemViewHolder = (ItemBagViewHolder) holder;
             obj = objArrayList.get(position);
-            int totalprice = Integer.parseInt(obj.get_sellingPrice())+20;
+            final int totalprice = Integer.parseInt(obj.get_sellingPrice());
             itemViewHolder.txttotalprice.setText(totalprice+" Rs.");
             itemViewHolder.txtprice.setText(obj.get_sellingPrice()+" Rs.");
             itemViewHolder.txtname.setText(obj.get_productName());
@@ -175,8 +175,8 @@ public class ItemBagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 public void valueChanged(int value, ActionEnum action) {
 
                     ProductlistBean objnew = objArrayList.get(objArrayList.indexOf(itemViewHolder.itemView.getTag()));
-                    int updatedprice = Integer.parseInt(objnew.get_sellingPrice())*value;
-                    int updatedtotalprice = updatedprice+20;
+                    int updatedprice = (Integer.parseInt(objnew.get_sellingPrice())/(Integer.parseInt( obj.get_productPurchaseQuantatity())))*value;
+                    int updatedtotalprice = updatedprice;
                     itemViewHolder.txtprice.setText(updatedprice+" Rs");
                     itemViewHolder.txttotalprice.setText(updatedtotalprice+" Rs");
 
@@ -185,8 +185,8 @@ public class ItemBagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     int shipping = objArrayList.size()*20;
                     int finalprice = Integer.parseInt(totalPrice)+shipping;
                     footerHolder.txtSubTotal.setText(totalPrice+" Rs.");
-                    footerHolder.txtShipping.setText(shipping+" Rs.");
-                    footerHolder.txtTotal.setText(finalprice+" Rs.");
+                    footerHolder.txtShipping.setText("0 Rs");
+                    footerHolder.txtTotal.setText(totalPrice+" Rs.");
                     footerHolder.txtAdress.setText(address);
                     footerHolder.txtMobilenumber.setText(mobilenumber);
                     //notifyDataSetChanged();
@@ -255,7 +255,7 @@ public class ItemBagAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     }
                 }
             });
-            itemViewHolder.txtSoldBy.setText(obj.get_RegisteredDisplayName());
+           // itemViewHolder.txtSoldBy.setText(obj.get_RegisteredDisplayName());
             Picasso.with(context)
                     .load(obj.get_imagepath())
                     .placeholder(R.drawable.placeholder) // optional

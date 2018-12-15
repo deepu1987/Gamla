@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:text="@string/soldbyname"
+                android:text="TrueGarden Agro  Pvt. Ltd."
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/textsize" />
 
@@ -138,7 +138,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="5dp"
-                android:text="Shipping Fee(Delivery by 8th feb 2018)"
+                android:text="Shipping Fee"
                 android:textColor="@android:color/black"
                 android:textSize="16dp"
                 android:id="@+id/textView11" />
@@ -158,16 +158,17 @@
 
             <TextView
                 android:id="@+id/textView13"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
 
                 android:layout_height="wrap_content"
+                android:gravity="right"
                 android:layout_alignBaseline="@+id/textView11"
                 android:layout_alignBottom="@+id/textView11"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
+
                 android:layout_marginEnd="16dp"
                 android:layout_marginRight="16dp"
-                android:text="20 Rs"
+                android:text="0 Rs"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/textsize1" />
 
@@ -180,6 +181,8 @@
                 android:layout_alignLeft="@+id/textView13"
                 android:layout_alignStart="@+id/textView13"
                 android:text="699 Rs"
+                android:gravity="right"
+                android:layout_marginRight="@dimen/fab_margin"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/textsize1"
                 android:textStyle="bold" />

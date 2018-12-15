@@ -20,17 +20,19 @@ import java.util.ArrayList;
  */
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSON = 4;
-    public static final String DATABASE_NAME = "Gamla1.db";
+    private static final int DATABASE_VERSON = 5;
+    public static final String DATABASE_NAME = "Gamla2.db";
     public static String TABLE_CART = "Cart";
     public static String TABLE_USER = "User";
     public static String TABLE_ADDRESS = "Address";
     public static String TABLE_FILTER_PRODUCT_TYPE = "FilterProductType";
     public static String TABLE_FILTER_PRICE_VALUE = "FilterPriceValue";
-    public Context _context;
+    public static String TABLE_PINCODE = "LMPincode";
+    public static Context _context;
 
     public static final String KEY_ID = "id";
     public static final String KEY_PRODUCT_TYPE_NAME = "ProductTypeName";
+    public static final String KEY_EMAIL_ID = "EmailId";
     public static final String KEY_IS_SELECTED = "IsSelected";
     public static final String KEY_PRODUCT_ID = "ProductID";
     public static final String KEY_SKU_ID = "SkuId";
@@ -55,6 +57,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String KEY_STATE = "State";
     public static final String KEY_CITY = "City";
     public static final String KEY_PRODUCT_PURCHASE_QUANTATITY = "ProductPurchaseQuantatity";
+
+    public static final String KEY_EXPECTED_PAYOUT = "ExpectedPayout";
+    public static final String KEY_HEIGHT = "Height";
+    public static final String KEY_WIDTH = "Width";
+    public static final String KEY_LENGTH = "Length";
 
     public static final String KEY_USER_NAME = "UserName";
     public static final String KEY_USER_PASSWORD = "Password";
@@ -94,11 +101,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + " TEXT ," + KEY_BUISNESS_ID + " TEXT, "
                 + KEY_BUISNESS_TYPE + " TEXT, " + KEY_DESCRIPTION + " TEXT, "
                 + KEY_DISPLAY_NAME + " TEXT, "
-                + KEY_REGISTERE_DISPLAY_NAME + " TEXT, " + KEY_REGISTERED_DISPLAY_ADRESS + " TEXT," + KEY_PIN_CODE + " TEXT, " + KEY_STATE + " TEXT, " + KEY_CITY + " TEXT, " + KEY_PRODUCT_PURCHASE_QUANTATITY+" TEXT "+")";
+                + KEY_REGISTERE_DISPLAY_NAME + " TEXT, " + KEY_REGISTERED_DISPLAY_ADRESS + " TEXT," + KEY_PIN_CODE + " TEXT, " + KEY_STATE + " TEXT, " + KEY_CITY + " TEXT, " + KEY_PRODUCT_PURCHASE_QUANTATITY+" TEXT, "+ KEY_EXPECTED_PAYOUT +" TEXT, "+ KEY_HEIGHT +" TEXT, "+KEY_WIDTH+" TEXT, "+ KEY_LENGTH +" TEXT "+")";
         db.execSQL(CREATE_CART_TABLE);
 
         String CREATE_USER_TABLE = "CREATE TABLE "+ TABLE_USER + "("
-                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +KEY_USER_NAME+" TEXT,"+KEY_USER_PASSWORD+" TEXT"+")";
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +KEY_USER_NAME+" TEXT,"+KEY_USER_PASSWORD+" TEXT, "+KEY_EMAIL_ID+" TEXT"+")";
         db.execSQL(CREATE_USER_TABLE);
 
         String CREATE_PRODUCT_TYPE_TABLE = "CREATE TABLE "+ TABLE_FILTER_PRODUCT_TYPE + "("
@@ -153,6 +160,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             values.put(KEY_STATE, obj.get_state());
             values.put(KEY_CITY, obj.get_city());
             values.put(KEY_PRODUCT_PURCHASE_QUANTATITY, obj.get_productPurchaseQuantatity());
+            values.put(KEY_EXPECTED_PAYOUT, obj.get_expectedPayout());
+            values.put(KEY_HEIGHT,obj.get_height());
+            values.put(KEY_WIDTH,obj.get_width());
+            values.put(KEY_LENGTH,obj.get_length());
             db.insertOrThrow(TABLE_CART, null, values);
 
 
@@ -160,7 +171,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
 
     }
-    public void SaveUserRecord(String Username,String Password)
+    public void SaveUserRecord(String Username,String Password,String emailid)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values;
@@ -168,6 +179,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             values = new ContentValues();
             values.put(KEY_USER_NAME,Username);
             values.put(KEY_USER_PASSWORD,Password);
+            values.put(KEY_EMAIL_ID,emailid);
             db.insert(TABLE_USER,null,values);
 
         db.close();
@@ -306,8 +318,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     do {
 
                       objArraylist.add(c.getString(c.getColumnIndex(KEY_USER_NAME)));
-
                       objArraylist.add(c.getString(c.getColumnIndex(KEY_USER_PASSWORD)));
+                      objArraylist.add(c.getString(c.getColumnIndex(KEY_EMAIL_ID)));
 
                     } while (c.moveToNext());
                 }
@@ -370,6 +382,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         obj.set_status(c.getString(c.getColumnIndex(KEY_STATUS)));
                         obj.set_weight(c.getString(c.getColumnIndex(KEY_WEIGHT)));
                         obj.set_productPurchaseQuantatity(c.getString(c.getColumnIndex(KEY_PRODUCT_PURCHASE_QUANTATITY)));
+                        obj.set_expectedPayout(c.getString(c.getColumnIndex(KEY_EXPECTED_PAYOUT)));
+                        obj.set_height(c.getString(c.getColumnIndex(KEY_HEIGHT)));
+                        obj.set_width(c.getString(c.getColumnIndex(KEY_WIDTH)));
+                        obj.set_length(c.getString(c.getColumnIndex(KEY_LENGTH)));
 
 
                         objArraylist.add(obj);
@@ -595,4 +611,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return count;
     }
 
+    public static boolean checkPincodeExixtOrNot(String pincode)
+    {
+        System.out.println("helooooooooooooooooooooooooooooooo->>>>>>>>>>>"+pincode);
+        OpenAssetDatabaseHelper OAD = new OpenAssetDatabaseHelper(_context);
+        SQLiteDatabase db = OAD.openDatabase();
+        String query = "SELECT * FROM "+TABLE_PINCODE+" where Pincode = '"+pincode+"'";
+        System.out.println("query---------------------->"+query);
+        Cursor c = null;
+        try{
+            c = db.rawQuery(query,null);
+            if(c.getCount()>0)
+            {
+               return true;
+            }
+            else
+            {
+               return false;
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
 }

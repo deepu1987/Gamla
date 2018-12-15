@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
@@ -20,6 +21,7 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:testOnly="false"
         tools:replace="android:allowBackup">
         <activity
             android:name=".MainActivity"
@@ -43,20 +45,25 @@
             android:theme="@style/ToolbarTheme" />
         <activity
             android:name=".PrivacyPolicy"
-            android:screenOrientation="sensorPortrait" />
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/ToolbarTheme" />
         <activity
             android:name="com.gamla.deepanshu.ProductDetail.PlantsGallary"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/AppTheme" >
-
+            android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="www.gamlahub.com" android:scheme="http"/>
-                <data android:host="www.gamlahub.com" android:scheme="https"/>
-            </intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="www.gamlahub.com"
+                    android:scheme="http" />
+                <data
+                    android:host="www.gamlahub.com"
+                    android:scheme="https" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.gamla.deepanshu.ProductList.FilterPlants"
@@ -122,12 +129,21 @@
         <!-- Add your API key here -->
         <meta-data
             android:name="com.razorpay.ApiKey"
-            android:value="rzp_test_h9xxZa9g32hAEx" />
+            android:value="rzp_live_nxMmD11pI1NB1Y" />
 
         <activity
             android:name="com.gamla.deepanshu.home.ContactUs"
             android:label="@string/title_activity_contact_us"
             android:theme="@style/ToolbarTheme" />
+        <activity
+            android:name=".TermCondition"
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/ToolbarTheme" />
+        <activity android:name=".RefundfPolicy"
+            android:screenOrientation="sensorPortrait"
+
+            android:theme="@style/ToolbarTheme"
+            ></activity>
     </application>
 
 </manifest>

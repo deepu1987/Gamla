@@ -2,7 +2,8 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="265dp"
+    android:layout_height="260dp"
+    android:layout_margin="1dp"
 
 
     >
@@ -20,7 +21,7 @@
                 android:id="@+id/imageplant"
 
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="165dp"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitXY" />
 

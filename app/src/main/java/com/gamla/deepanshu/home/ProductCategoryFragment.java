@@ -234,7 +234,7 @@ public class ProductCategoryFragment extends Fragment implements OnCategoryItemC
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }){
 
@@ -475,7 +475,7 @@ public class ProductCategoryFragment extends Fragment implements OnCategoryItemC
                                     }
 
                                     rcpromotionList.setHasFixedSize(true);
-                                    LinearLayoutManager llpromotionlist = new LinearLayoutManager(getActivity());
+                                    LinearLayoutManager llpromotionlist = new LinearLayoutManager(getActivity().getApplicationContext());
                                     llpromotionlist.setOrientation(GridLayoutManager.HORIZONTAL);
                                     rcpromotionList.setLayoutManager(llpromotionlist);
                                     PromotionSubAdapter promotionSubAdapter = new PromotionSubAdapter(getActivity().getApplicationContext(), promotion_image_list);
@@ -495,9 +495,13 @@ public class ProductCategoryFragment extends Fragment implements OnCategoryItemC
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
-                            Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                            try {
+                                Toast.makeText(getActivity().getApplicationContext().getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            }
                     }){
 
                 @Override
@@ -607,7 +611,7 @@ public class ProductCategoryFragment extends Fragment implements OnCategoryItemC
         ProductlistBean obj;
         obj = finalplantArrayList.get(groupPosition).get(position);
         System.out.println("gp------------------->"+groupPosition);
-        Intent i = new Intent(getActivity(),PlantsGallary.class);
+        Intent i = new Intent(getActivity().getApplicationContext(),PlantsGallary.class);
         Bundle bundle = new Bundle();
         if(newprice>0)
         {
@@ -615,6 +619,6 @@ public class ProductCategoryFragment extends Fragment implements OnCategoryItemC
         }
         bundle.putSerializable("PLantsDetail",obj);
         i.putExtras(bundle);
-        getActivity().startActivity(i);
+        getActivity().getApplicationContext().startActivity(i);
     }
 }

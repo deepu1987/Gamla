@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.gamla.deepanshu.ProductList.ProductlistBean;
 import com.gamla.deepanshu.gamla.R;
+import com.gamla.deepanshu.home.ContactUs;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -20,7 +21,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ItemDetail extends AppCompatActivity {
     TextView txtName,txtstatus,txtstatusdate;
     CircleImageView imgImage;
-    LinearLayout llOrderDetails;
+    LinearLayout llOrderDetails,llcontactus;
     ProductlistBean obj;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class ItemDetail extends AppCompatActivity {
         txtstatusdate = findViewById(R.id.itemdetailsstatusdate);
         imgImage = findViewById(R.id.itemdetailsimage);
         llOrderDetails = findViewById(R.id.vieworderdetails);
+        llcontactus = findViewById(R.id.contactus);
         obj  = (ProductlistBean) getIntent().getSerializableExtra("itemdetail");
         txtName.setText(obj.get_productName());
         txtstatus.setText(obj.get_orderStatus());
@@ -60,6 +62,16 @@ public class ItemDetail extends AppCompatActivity {
             public void onClick(View view) {
 
                 startActivityForResult(new Intent(ItemDetail.this,MyOrderDetails.class).putExtra("orderdetail",obj),101);
+                overridePendingTransition(R.anim.left_to_right,R.anim.hold);
+            }
+        });
+        llcontactus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i = new Intent(ItemDetail.this, ContactUs.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(i,102);
                 overridePendingTransition(R.anim.left_to_right,R.anim.hold);
             }
         });

@@ -2,17 +2,22 @@ package com.gamla.deepanshu.gamla;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.Color;
+
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.view.LayoutInflater;
 import android.view.View;
+
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -29,6 +34,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.gamla.deepanshu.Function.FontsUtils;
 import com.gamla.deepanshu.Function.Utility;
+import com.sdsmdg.tastytoast.TastyToast;
+import com.shashank.sony.fancydialoglib.Animation;
+import com.shashank.sony.fancydialoglib.FancyAlertDialog;
+import com.shashank.sony.fancydialoglib.FancyAlertDialogListener;
+import com.shashank.sony.fancydialoglib.Icon;
 
 import org.json.JSONException;
 
@@ -37,6 +47,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
+
 public class CreateAccount extends AppCompatActivity  implements View.OnClickListener{
     Button btnReg;
     EditText edtEmail,edtMobileno,edtname,edtpasword,edtconfirmPassword;
@@ -44,6 +57,7 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
     CheckBox chktrm;
     ProgressDialog progressDialog;
     RequestQueue rQueue;
+    TextView txtTermCondition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,10 +73,16 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
         edtname = findViewById(R.id.regname);
         edtpasword = findViewById(R.id.android_hide_show_edittext_password);
         chktrm = findViewById(R.id.regcheckbox);
+        txtTermCondition = findViewById(R.id.termandcondition);
         rQueue = Volley.newRequestQueue(CreateAccount.this);
-
-
-
+        txtTermCondition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(CreateAccount.this,TermCondition.class);
+                in.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivityForResult(in,101);
+            }
+        });
     }
 
     @Override
@@ -116,7 +136,8 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
 
                             System.out.println("testing------------------->"+s);
                             if(s.equals("true")){
-                                Toast.makeText(CreateAccount.this, "Registration Successful", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(CreateAccount.this, "Registration Successful", Toast.LENGTH_LONG).show();
+                                TastyToast.makeText(getApplicationContext(), "Registration Successful", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
                                 try {
                                     confirmOtp();
                                 }
@@ -125,8 +146,36 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
                                     e.printStackTrace();
                                 }
                             }
+                            else if(s.equalsIgnoreCase("This Mobile number already registered"))
+                            {
+                                new FancyAlertDialog.Builder(CreateAccount.this)
+                                        .setTitle("Registration")
+                                        .setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark))  //Don't pass R.color.colorvalue
+                                        .setMessage(s)
+                                        .setNegativeBtnText("Cancel")
+                                        .setPositiveBtnBackground(Color.parseColor("#FF4081"))  //Don't pass R.color.colorvalue
+                                        .setPositiveBtnText("OK")
+                                        .setNegativeBtnBackground(Color.parseColor("#FFA9A7A8"))  //Don't pass R.color.colorvalue
+                                        .setAnimation(Animation.POP)
+                                        .isCancellable(true)
+                                        .setIcon(R.drawable.ic_star_border_black_24dp, Icon.Visible)
+                                        .OnPositiveClicked(new FancyAlertDialogListener() {
+                                            @Override
+                                            public void OnClick() {
+
+                                            }
+                                        })
+                                        .OnNegativeClicked(new FancyAlertDialogListener() {
+                                            @Override
+                                            public void OnClick() {
+
+                                            }
+                                        })
+                                        .build();
+                            }
                             else{
-                                Toast.makeText(CreateAccount.this, "Can't Register", Toast.LENGTH_LONG).show();
+                               // Toast.makeText(CreateAccount.this, "Can't Register", Toast.LENGTH_LONG).show();
+                                TastyToast.makeText(getApplicationContext(), "Can't Register", TastyToast.LENGTH_LONG, TastyToast.ERROR);
                             }
                         }
                     },new Response.ErrorListener(){
@@ -150,7 +199,8 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
 
 
 
-                            Toast.makeText(CreateAccount.this, "Some error occurred -> "+message, Toast.LENGTH_LONG).show();;
+                           // Toast.makeText(CreateAccount.this, "Some error occurred -> "+message, Toast.LENGTH_LONG).show();;
+                            TastyToast.makeText(getApplicationContext(), "Some error occurred -> "+message, TastyToast.LENGTH_LONG, TastyToast.ERROR);
                         }
                     }) {
                         @Override
@@ -179,12 +229,14 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(),"Please check term and condition",Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getApplicationContext(),"Please check term and condition",Toast.LENGTH_SHORT).show();
+                    TastyToast.makeText(getApplicationContext(), "Please check term and condition", TastyToast.LENGTH_LONG, TastyToast.INFO);
                 }
             }
             else
             {
-                Toast.makeText(getApplicationContext(),"Password and confirm password should be match",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),"Password and confirm password should be match",Toast.LENGTH_SHORT).show();
+                TastyToast.makeText(getApplicationContext(), "Password and confirm password should be match", TastyToast.LENGTH_LONG, TastyToast.INFO);
             }
 
         }
@@ -221,8 +273,13 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
                 alertDialog.dismiss();
 
                 //Displaying a progressbar
-                final ProgressDialog loading = ProgressDialog.show(CreateAccount.this, "Authenticating", "Please wait while we check the entered code", false,false);
+                //final ProgressDialog loading = ProgressDialog.show(CreateAccount.this, "Authenticating", "Please wait while we check the entered code", false,false);
+                final ACProgressFlower dialog = new ACProgressFlower.Builder(CreateAccount.this)
+                        .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                        .themeColor(Color.WHITE)
 
+                        .fadeColor(Color.DKGRAY).build();
+                dialog.show();
                 //Getting the user entered otp from edittext
                 final String otp = editTextConfirmOtp.getText().toString().trim();
 
@@ -234,7 +291,7 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
                                 //if the server response is success
                                 if(response.equalsIgnoreCase("true")){
                                     //dismissing the progressbar
-                                    loading.dismiss();
+                                    dialog.dismiss();
 
                                     //Starting a new activity
                                     finish();
@@ -246,8 +303,8 @@ public class CreateAccount extends AppCompatActivity  implements View.OnClickLis
                                     startActivity(new Intent(CreateAccount.this, Login.class).putExtras(bundle));*/
                                 }else{
                                     //Displaying a toast if the otp entered is wrong
-                                    loading.dismiss();
-                                    Toast.makeText(CreateAccount.this,"Wrong OTP Please Try Again",Toast.LENGTH_LONG).show();
+                                    //Toast.makeText(CreateAccount.this,"Wrong OTP Please Try Again",Toast.LENGTH_LONG).show();
+                                    TastyToast.makeText(getApplicationContext(), "Wrong OTP Please Try Again", TastyToast.LENGTH_LONG, TastyToast.ERROR);
                                     try {
                                         //Asking user to enter otp again
                                         confirmOtp();

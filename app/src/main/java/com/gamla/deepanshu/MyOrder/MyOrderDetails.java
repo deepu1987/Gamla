@@ -37,13 +37,14 @@ public class MyOrderDetails extends AppCompatActivity {
         txtproductname.setText(obj.get_productName());
         txtOrderQuantatity.setText("YOU HAVE "+obj.get_productPurchaseQuantatity()+" ITEM IN YOUR ORDER");
         txtordersubtotal.setText(obj.get_sellingPrice()+" Rs.");
-        txtshipping.setText("20 Rs.");
-        int totalprice = Integer.parseInt( obj.get_sellingPrice())+20;
+        txtshipping.setText("0 Rs.");
+        int totalprice = Integer.parseInt( obj.get_sellingPrice());
         txtproductUperPrice.setText(totalprice+" Rs.");
         txtOrderTotal.setText(totalprice+" Rs.");
         txtDeliveryto.setText("Delivery to: "+obj.get_fullname());
         txtstatus.setText(obj.get_orderStatus());
         txtAdress.setText(obj.get_deliveryAdress());
+        txttransactionid.setText("Transaction Id: "+obj.get_transactionId());
 
         Picasso.with(getApplicationContext())
                 .load(obj.get_imagepath())

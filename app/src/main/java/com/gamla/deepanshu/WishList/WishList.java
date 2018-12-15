@@ -2,6 +2,7 @@ package com.gamla.deepanshu.WishList;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ import com.gamla.deepanshu.ProductList.ProductlistBean;
 import com.gamla.deepanshu.ProductList.onPlantsItemClickListner;
 import com.gamla.deepanshu.gamla.R;
 import com.gamla.deepanshu.Function.Utility;
+import com.sdsmdg.tastytoast.TastyToast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,6 +31,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class WishList extends AppCompatActivity implements onPlantsItemClickListner {
 
@@ -60,8 +65,13 @@ public class WishList extends AppCompatActivity implements onPlantsItemClickList
     private void FetchRecordServer()
     {
         plantArrayList = new ArrayList<>();
-        final ProgressDialog loading = ProgressDialog.show(WishList.this, "Gamla", "Please wait...", false,false);
+       // final ProgressDialog loading = ProgressDialog.show(WishList.this, "Gamla", "Please wait...", false,false);
+        final ACProgressFlower dialog = new ACProgressFlower.Builder(WishList.this)
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
 
+                .fadeColor(Color.DKGRAY).build();
+        dialog.show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.WISHLIST_URL,
                 new Response.Listener<String>() {
                     @Override
@@ -72,8 +82,9 @@ public class WishList extends AppCompatActivity implements onPlantsItemClickList
                             //if the server response is success
                             String res = response+"";
                             if(res.contains("false")){
-                                loading.dismiss();
-                                Toast.makeText(WishList.this, "Record not avilable", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                                //Toast.makeText(WishList.this, "Record not avilable", Toast.LENGTH_SHORT).show();
+                                TastyToast.makeText(getApplicationContext(),  "Record not avilable", TastyToast.LENGTH_LONG, TastyToast.INFO);
 
 
                             }else{
@@ -125,14 +136,14 @@ public class WishList extends AppCompatActivity implements onPlantsItemClickList
                             ca.setonClickListner(mClicklistner);
                             recList.setAdapter(ca);
 
-                            loading.dismiss();
+                            dialog.dismiss();
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        loading.dismiss();
+                        dialog.dismiss();
                         Toast.makeText(WishList.this, error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }){

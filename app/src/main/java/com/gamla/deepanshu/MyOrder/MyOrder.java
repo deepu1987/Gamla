@@ -2,6 +2,7 @@ package com.gamla.deepanshu.MyOrder;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,10 +22,12 @@ import com.android.volley.toolbox.Volley;
 import com.gamla.deepanshu.Database.DatabaseHandler;
 import com.gamla.deepanshu.ProductList.ProductlistBean;
 import com.gamla.deepanshu.ProductList.onPlantsItemClickListner;
+import com.gamla.deepanshu.gamla.CreateAccount;
 import com.gamla.deepanshu.gamla.R;
 import com.gamla.deepanshu.Function.Utility;
 import com.gamla.deepanshu.home.Home;
 import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
+import com.sdsmdg.tastytoast.TastyToast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,6 +35,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class MyOrder extends AppCompatActivity implements onPlantsItemClickListner {
     RequestQueue rQueue;
@@ -71,8 +77,13 @@ public class MyOrder extends AppCompatActivity implements onPlantsItemClickListn
     private void FetchOrderListFromServer(final int limitstart1, final int limitend1)
     {
 
-        final ProgressDialog loading = ProgressDialog.show(MyOrder.this, "My Order", "Please wait...", false,false);
+       // final ProgressDialog loading = ProgressDialog.show(MyOrder.this, "My Order", "Please wait...", false,false);
+        final ACProgressFlower dialog = new ACProgressFlower.Builder(MyOrder.this)
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
 
+                .fadeColor(Color.DKGRAY).build();
+        dialog.show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.ORDER_LIST,
                 new Response.Listener<String>() {
                     @Override
@@ -81,7 +92,7 @@ public class MyOrder extends AppCompatActivity implements onPlantsItemClickListn
 
                         if(response.contains("Record Not found"))
                         {
-                            loading.dismiss();
+                            dialog.dismiss();
                             Toast.makeText(MyOrder.this, "Record Not found", Toast.LENGTH_LONG).show();
                         }
                         else
@@ -112,6 +123,7 @@ public class MyOrder extends AppCompatActivity implements onPlantsItemClickListn
                                     objBean.set_deliveryAdress(obj.getString("DeliveryAdress"));
                                     objBean.set_UserMobileNumber(obj.getString("UserAdressMobileNumber"));
                                     objBean.set_fullname(obj.getString("UserName"));
+                                    objBean.set_transactionId(obj.getString("TransactionId"));
                                     rowcount = Integer.parseInt(obj.getString("rowcount"));
                                     objArrayList.add(objBean);
                                 }
@@ -120,7 +132,7 @@ public class MyOrder extends AppCompatActivity implements onPlantsItemClickListn
                             catch (Exception e)
                             {
                                 e.printStackTrace();
-                                loading.dismiss();
+                                dialog.dismiss();
                             }
                         }
                         limitstart = limitstart+15;
@@ -130,15 +142,16 @@ public class MyOrder extends AppCompatActivity implements onPlantsItemClickListn
                            recList.setAdapter(ca);
 
 
-                        loading.dismiss();
+                        dialog.dismiss();
 
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        loading.dismiss();
-                        Toast.makeText(MyOrder.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                        //Toast.makeText(MyOrder.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                        TastyToast.makeText(getApplicationContext(), error.getMessage(), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                     }
                 }){
             @Override

@@ -42,6 +42,54 @@ public class ProductlistBean implements Serializable {
     private String _timeSpanForSearch;
     private String _discount;
     private String _messageForSeller;
+    private String _expectedPayout;
+    private String _height;
+
+
+    public String get_transactionId() {
+        return _transactionId;
+    }
+
+    public void set_transactionId(String _transactionId) {
+        this._transactionId = _transactionId;
+    }
+
+    private String _transactionId;
+
+    public String get_expectedPayout() {
+        return _expectedPayout;
+    }
+
+    public void set_expectedPayout(String _expectedPayout) {
+        this._expectedPayout = _expectedPayout;
+    }
+
+    public String get_height() {
+        return _height;
+    }
+
+    public void set_height(String _height) {
+        this._height = _height;
+    }
+
+    public String get_width() {
+        return _width;
+    }
+
+    public void set_width(String _width) {
+        this._width = _width;
+    }
+
+    public String get_length() {
+        return _length;
+    }
+
+    public void set_length(String _length) {
+        this._length = _length;
+    }
+
+    private String _width;
+    private String _length;
     public String get_messageForSeller() {
         return _messageForSeller;
     }

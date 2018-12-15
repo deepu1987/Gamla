@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.gamla.deepanshu.Database.DatabaseHandler;
 import com.gamla.deepanshu.gamla.R;
+import com.sdsmdg.tastytoast.TastyToast;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.PlantsView
     {
         this.objArrayList = objArraylist;
         this.context = context;
-        this.discount = discount;
+       // this.discount = discount;
     }
 
     @Override
@@ -63,6 +64,7 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.PlantsView
 
       holder.txtname.setText(obj.get_productName());
       holder.itemView.setTag(obj);
+      discount = obj.get_discount();
       if(discount.equalsIgnoreCase("0"))
       {
           holder.txtDiscount.setVisibility(View.GONE);
@@ -84,14 +86,17 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.PlantsView
               DatabaseHandler dh = new DatabaseHandler(context);
               ProductlistBean objBean = objArrayList.get(position);
               objBean.set_productPurchaseQuantatity("1");
+              objBean.set_sellingPrice(newprice+"");
               try {
                   dh.savecartRecord(objBean);
-                  Toast.makeText(context, "Product Added to Cart", Toast.LENGTH_SHORT).show();
+                 // Toast.makeText(context, "Product Added to Cart", Toast.LENGTH_SHORT).show();
+                  TastyToast.makeText(context,  "Product Added to Cart", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
               }
               catch (Exception e)
               {
                   //e.printStackTrace();
-                  Toast.makeText(context, "Product already added to cart", Toast.LENGTH_SHORT).show();
+                 // Toast.makeText(context, "Product already added to cart", Toast.LENGTH_SHORT).show();
+                  TastyToast.makeText(context,  "Product already added to cart", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
               }
           }
       });

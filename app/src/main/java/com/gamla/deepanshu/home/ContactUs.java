@@ -4,10 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gamla.deepanshu.gamla.R;
+import com.sdsmdg.tastytoast.TastyToast;
 
 public class ContactUs extends AppCompatActivity {
     private static final int MAKE_CALL_PERMISSION_REQUEST_CODE = 1;
@@ -32,10 +35,11 @@ public class ContactUs extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (checkPermission(Manifest.permission.CALL_PHONE)) {
-                    String dial = "tel:7991898496";
+                    String dial = "tel:9891852578";
                     startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(dial)));
                 } else {
-                    Toast.makeText(ContactUs.this, "Permission Call Phone denied", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(ContactUs.this, "Permission Call Phone denied", Toast.LENGTH_SHORT).show();
+                    TastyToast.makeText(getApplicationContext(), "Permission Call Phone denied", TastyToast.LENGTH_LONG, TastyToast.INFO);
                 }
             }
         });
@@ -44,6 +48,17 @@ public class ContactUs extends AppCompatActivity {
 
     }
     private boolean checkPermission(String permission) {
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE}, MAKE_CALL_PERMISSION_REQUEST_CODE);
+
+                // return;
+            }
+        }
         return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
     }
 

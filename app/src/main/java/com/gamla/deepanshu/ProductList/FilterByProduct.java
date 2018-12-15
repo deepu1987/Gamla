@@ -40,6 +40,7 @@ import com.android.volley.toolbox.Volley;
 import com.gamla.deepanshu.Database.DatabaseHandler;
 import com.gamla.deepanshu.Function.Utility;
 import com.gamla.deepanshu.gamla.R;
+import com.sdsmdg.tastytoast.TastyToast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -130,7 +131,8 @@ public class FilterByProduct extends AppCompatActivity {
                             String res = response+"";
                             if(res.contains("false")){
                                 loading.dismiss();
-                                Toast.makeText(FilterByProduct.this, "Record not avilable", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(FilterByProduct.this, "Record not avilable", Toast.LENGTH_SHORT).show();
+                                TastyToast.makeText(getApplicationContext(),  "Record not avilable", TastyToast.LENGTH_LONG, TastyToast.INFO);
 
                             }else{
                                 try {
@@ -158,7 +160,9 @@ public class FilterByProduct extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(FilterByProduct.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                          //  Toast.makeText(FilterByProduct.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                            TastyToast.makeText(getApplicationContext(),  error.getMessage(), TastyToast.LENGTH_LONG, TastyToast.ERROR);
+
                         }
                     }){
                 @Override

@@ -31,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.gamla.deepanshu.MyOrder.MyOrder;
 import com.gamla.deepanshu.ProductList.ProductlistBean;
 import com.gamla.deepanshu.Database.DatabaseHandler;
 import com.gamla.deepanshu.ShoppingCart.ItemBag;
@@ -39,12 +40,16 @@ import com.gamla.deepanshu.gamla.R;
 import com.gamla.deepanshu.Function.Utility;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
+import com.sdsmdg.tastytoast.TastyToast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class PlantsGallary extends AppCompatActivity{
 
@@ -58,13 +63,14 @@ public class PlantsGallary extends AppCompatActivity{
     LinearLayout llBuy;
     ProductlistBean obj;
     TextView txtprice,txtname,txtbuyprice,txtsoldby,txtAddToCart;
-    ExpandableTextView expTv1;
+    TextView expTv1;
     FrameLayout shopingcarticon;
     TextView txtshopingcart;
     DatabaseHandler dh;
     int rowcount=0;
     RequestQueue rQueue;
     ArrayList<String> objArrylistuser=new ArrayList<>();
+    LinearLayout llwishlist;
     private Context _context;
 
 
@@ -73,6 +79,7 @@ public class PlantsGallary extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         setContentView(R.layout.plants_gallary);
 
 
@@ -83,7 +90,7 @@ public class PlantsGallary extends AppCompatActivity{
         dh = new DatabaseHandler(this);
 
         rowcount = dh.getRowCount(DatabaseHandler.TABLE_CART);
-        expTv1 = (ExpandableTextView) findViewById(R.id.expand_text_view);
+        expTv1 = (TextView) findViewById(R.id.expandable_text);
         Bundle bundle = getIntent().getExtras();
         obj = (ProductlistBean) bundle.getSerializable("PLantsDetail");
         init();
@@ -134,19 +141,20 @@ public class PlantsGallary extends AppCompatActivity{
         vp_slider = (ViewPager) findViewById(R.id.vp_slider);
         ll_dots = (LinearLayout) findViewById(R.id.ll_dots);
         imgWishlist = (ImageView) findViewById(R.id.wishlistimage);
+        llwishlist = findViewById(R.id.wishlistlayout);
         txtname = findViewById(R.id.textView3);
         txtprice = findViewById(R.id.textView4);
         txtAddToCart = findViewById(R.id.AddToCart);
         txtbuyprice = findViewById(R.id.buyprice);
         llBuy = findViewById(R.id.buy);
-        txtsoldby = findViewById(R.id.soldbyproduct);
+       // txtsoldby = findViewById(R.id.soldbyproduct);
         shopingcarticon = findViewById(R.id.shopingcarticon);
         txtshopingcart = findViewById(R.id.mark);
 
         txtprice.setText("Price  : "+obj.get_sellingPrice()+ " Rs");
         txtname.setText("Name : "+obj.get_productName());
-        txtbuyprice.setText("Buy for Rs. "+(Integer.parseInt(obj.get_sellingPrice())+20));
-        txtsoldby.setText(obj.get_RegisteredDisplayName());
+        txtbuyprice.setText("Buy for Rs. "+(Integer.parseInt(obj.get_sellingPrice())));
+       // txtsoldby.setText(obj.get_RegisteredDisplayName());
         expTv1.setText(obj.get_desceription());
         txtshopingcart.setText(rowcount+"");
         shopingcarticon.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +166,7 @@ public class PlantsGallary extends AppCompatActivity{
             }
         });
 
-        imgWishlist.setOnClickListener(new View.OnClickListener() {
+        llwishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -226,7 +234,8 @@ public class PlantsGallary extends AppCompatActivity{
                 obj.set_productPurchaseQuantatity("1");
                 try {
                     dh.savecartRecord(obj);
-                    Toast.makeText(_context, "Product Added to Cart", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(_context, "Product Added to Cart", Toast.LENGTH_SHORT).show();
+                    TastyToast.makeText(getApplicationContext(), "Product Added to Cart", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
                     rowcount = dh.getRowCount(DatabaseHandler.TABLE_CART);
                     txtshopingcart.setText(rowcount+"");
 
@@ -234,7 +243,8 @@ public class PlantsGallary extends AppCompatActivity{
                 catch (Exception e)
                 {
                     //e.printStackTrace();
-                    Toast.makeText(_context, "Product already added to cart", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(_context, "Product already added to cart", Toast.LENGTH_SHORT).show();
+                    TastyToast.makeText(getApplicationContext(),  "Product already added to cart", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
                 }
             }
         });
@@ -278,8 +288,13 @@ public class PlantsGallary extends AppCompatActivity{
 
     private void AddToWishList()
     {
-        final ProgressDialog loading = ProgressDialog.show(PlantsGallary.this, "Gamla", "Please wait...", false,false);
+        //final ProgressDialog loading = ProgressDialog.show(PlantsGallary.this, "Gamla", "Please wait...", false,false);
+        final ACProgressFlower dialog = new ACProgressFlower.Builder(PlantsGallary.this)
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
 
+                .fadeColor(Color.DKGRAY).build();
+        dialog.show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.Add_WISHLIST,
                 new Response.Listener<String>() {
                     @Override
@@ -288,24 +303,26 @@ public class PlantsGallary extends AppCompatActivity{
                         //if the server response is success
                         String res = response+"";
                         if(res.contains("false")){
-                            loading.dismiss();
+                            dialog.dismiss();
 
 
 
                         }else{
 
-                            Toast.makeText(PlantsGallary.this, "Item Added to wishlist", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(PlantsGallary.this, "Item Added to wishlist", Toast.LENGTH_SHORT).show();
+                            TastyToast.makeText(getApplicationContext(),  "Item Added to wishlist", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
                         }
 
 
-                        loading.dismiss();
+                        dialog.dismiss();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Toast.makeText(PlantsGallary.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(PlantsGallary.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                        TastyToast.makeText(getApplicationContext(),  error.getMessage(), TastyToast.LENGTH_LONG, TastyToast.ERROR);
                     }
                 }){
 
@@ -329,8 +346,13 @@ public class PlantsGallary extends AppCompatActivity{
         rQueue.add(stringRequest);
     }
     private void RemoveFromWishList(){
-        final ProgressDialog loading = ProgressDialog.show(PlantsGallary.this, "Gamla", "Please wait...", false,false);
+       // final ProgressDialog loading = ProgressDialog.show(PlantsGallary.this, "Gamla", "Please wait...", false,false);
+        final ACProgressFlower dialog = new ACProgressFlower.Builder(PlantsGallary.this)
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
 
+                .fadeColor(Color.DKGRAY).build();
+        dialog.show();
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.REMOVE_WISHLIST,
                 new Response.Listener<String>() {
                     @Override
@@ -339,17 +361,18 @@ public class PlantsGallary extends AppCompatActivity{
                         //if the server response is success
                         String res = response+"";
                         if(res.contains("false")){
-                            loading.dismiss();
+                            dialog.dismiss();
 
 
 
                         }else{
 
-                            Toast.makeText(PlantsGallary.this, "Item Removed to wishlist", Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(PlantsGallary.this, "Item Removed to wishlist", Toast.LENGTH_SHORT).show();
+                            TastyToast.makeText(getApplicationContext(),  "Item Removed to wishlist", TastyToast.LENGTH_LONG, TastyToast.INFO);
                         }
 
 
-                        loading.dismiss();
+                        dialog.dismiss();
                     }
                 },
                 new Response.ErrorListener() {

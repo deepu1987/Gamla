@@ -3,6 +3,7 @@ package com.gamla.deepanshu.home;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -21,6 +22,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -36,18 +38,21 @@ import com.gamla.deepanshu.gamla.AboutUs;
 import com.gamla.deepanshu.Database.DatabaseHandler;
 import com.gamla.deepanshu.ProductList.ProductListFragment;
 import com.gamla.deepanshu.ShoppingCart.ItemBag;
+import com.gamla.deepanshu.gamla.ForceUpdateChecker;
 import com.gamla.deepanshu.gamla.Login;
 import com.gamla.deepanshu.MyOrder.MyOrder;
 import com.gamla.deepanshu.gamla.MainActivity;
 import com.gamla.deepanshu.gamla.PrivacyPolicy;
 import com.gamla.deepanshu.gamla.R;
 import com.gamla.deepanshu.WishList.WishList;
+import com.gamla.deepanshu.gamla.RefundfPolicy;
+import com.gamla.deepanshu.gamla.TermCondition;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 
 
-public class Home extends AppCompatActivity implements ProductListFragment.OnFragmentInteractionListener {
+public class Home extends AppCompatActivity implements ProductListFragment.OnFragmentInteractionListener, ForceUpdateChecker.OnUpdateNeededListener {
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -82,7 +87,7 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
-
+        ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
         //=============================================================================//
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -123,7 +128,7 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
 
         TextView txtUserName = navHeader.findViewById(R.id.useremailadress);
         try {
-            txtUserName.setText(objUserArrayList.get(0));
+            txtUserName.setText(objUserArrayList.get(2));
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -387,7 +392,7 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
 
                     case R.id.nav_rate_us:
                         // launch new intent instead of loading fragment
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=PackageName")));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.gamla.deepanshu.gamla")));
                         drawer.closeDrawers();
                         return true;
 
@@ -396,9 +401,9 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
                         try {
                             Intent i = new Intent(Intent.ACTION_SEND);
                             i.setType("text/plain");
-                            i.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                            i.putExtra(Intent.EXTRA_SUBJECT, "Gamla Hub");
                             String sAux = "\nLet me recommend you this application\n\n";
-                            sAux = sAux + "https://play.google.com/store/apps/details?id=the.package.id \n\n";
+                            sAux = sAux + "https://play.google.com/store/apps/details?id=com.gamla.deepanshu.gamla \n\n";
                             i.putExtra(Intent.EXTRA_TEXT, sAux);
                             startActivity(Intent.createChooser(i, "choose one"));
                         } catch(Exception e) {
@@ -418,7 +423,19 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
                         return true;
                     case R.id.nav_privacy_policy:
                         // launch new intent instead of loading fragment
-                        startActivity(new Intent(Home.this, PrivacyPolicy.class));
+                        startActivityForResult(new Intent(Home.this, PrivacyPolicy.class),112);
+                        drawer.closeDrawers();
+                        return true;
+
+                    case R.id.nav_term_condition:
+                        // launch new intent instead of loading fragment
+                        startActivityForResult(new Intent(Home.this, TermCondition.class),113);
+                        drawer.closeDrawers();
+                        return true;
+
+                    case R.id.nav_cancelation_return_policy:
+                        // launch new intent instead of loading fragment
+                        startActivityForResult(new Intent(Home.this, RefundfPolicy.class),113);
                         drawer.closeDrawers();
                         return true;
                     default:
@@ -517,15 +534,15 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
                 overridePendingTransition(R.anim.slide_down,R.anim.hold);
                 return true;
             case R.id.rateus:   //this item has your app icon
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=PackageName")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.gamla.deepanshu.gamla")));
                 return true;
             case R.id.shareapp:   //this item has your app icon
                 try {
                     Intent shareintent = new Intent(Intent.ACTION_SEND);
                     shareintent.setType("text/plain");
-                    shareintent.putExtra(Intent.EXTRA_SUBJECT, "My application name");
+                    shareintent.putExtra(Intent.EXTRA_SUBJECT, "Gamla Hub");
                     String sAux = "\nLet me recommend you this application\n\n";
-                    sAux = sAux + "https://play.google.com/store/apps/details?id=the.package.id \n\n";
+                    sAux = sAux + "https://play.google.com/store/apps/details?id=com.gamla.deepanshu.gamla \n\n";
                     shareintent.putExtra(Intent.EXTRA_TEXT, sAux);
                     startActivity(Intent.createChooser(shareintent, "choose one"));
                 } catch(Exception e) {
@@ -572,6 +589,34 @@ public class Home extends AppCompatActivity implements ProductListFragment.OnFra
     private boolean checkPermission(String permission) {
         return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED;
     }
+
+    @Override
+    public void onUpdateNeeded(final String updateUrl) {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("New version available")
+                .setMessage("Please, update app to new version to continue reposting.")
+                .setPositiveButton("Update",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                redirectStore(updateUrl);
+                            }
+                        }).setNegativeButton("No, thanks",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        }).create();
+        dialog.show();
+    }
+
+    private void redirectStore(String updateUrl) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -35,10 +36,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.gamla.deepanshu.Database.DatabaseHandler;
+import com.gamla.deepanshu.MyOrder.MyOrder;
 import com.gamla.deepanshu.ProductDetail.PlantsGallary;
 import com.gamla.deepanshu.gamla.R;
 import com.gamla.deepanshu.Function.Utility;
 import com.github.pwittchen.infinitescroll.library.InfiniteScrollListener;
+import com.sdsmdg.tastytoast.TastyToast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,6 +49,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
 
 
 /**
@@ -86,6 +92,7 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
     String FilterPriceQuery = "";
     ArrayList<String> objArraylist = new ArrayList<>();
     ImageView ivRedIndicator;
+     ACProgressFlower dialog=null;
     public ProductListFragment() {
         // Required empty public constructor
     }
@@ -128,13 +135,13 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
         mClicklistner = this;
         setHasOptionsMenu(true);
         View v = inflater.inflate(R.layout.fragment_home,container,false);
-        rQueue = Volley.newRequestQueue(getActivity());
+        rQueue = Volley.newRequestQueue(getActivity().getApplicationContext());
         llsortby = v.findViewById(R.id.sortby);
         llfilter = v.findViewById(R.id.filter);
         txtSortByText = v.findViewById(R.id.sortbytext);
         txtFilterBYTexrt = v.findViewById(R.id.filtertext);
         ivRedIndicator = v.findViewById(R.id.redindicator);
-        dh = new DatabaseHandler(getActivity());
+        dh = new DatabaseHandler(getActivity().getApplicationContext());
         //init();
         Bundle bundle = getArguments();
         String headervalue = bundle.getString("Header Value");
@@ -144,7 +151,7 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
 
         recList = (RecyclerView) v.findViewById(R.id.cardList);
         recList.setHasFixedSize(true);
-        llm = new GridLayoutManager(getActivity(),2);
+        llm = new GridLayoutManager(getActivity().getApplicationContext(),2);
         llm.setOrientation(GridLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
         recList.addOnScrollListener(createInfiniteScrollListener());
@@ -189,7 +196,7 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
 
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getActivity(),FilterPlants.class);
+                Intent i = new Intent(getActivity().getApplicationContext(),FilterPlants.class);
                 i.putExtra("category",mParam1);
                 startActivityForResult(i,101);
                 getActivity().overridePendingTransition(R.anim.puul_up_from_bottom, R.anim.hold);
@@ -202,11 +209,16 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
     {
 
 
-           final ProgressDialog loading = ProgressDialog.show(getActivity(), "Gamla", "Please wait...", false,false);
+           //final ProgressDialog loading = ProgressDialog.show(getActivity(), "Gamla", "Please wait...", false,false);
        /* final SpotsDialog loading = new SpotsDialog(getActivity());
         loading.show();
 
         loading.dismiss();*/
+        dialog = new ACProgressFlower.Builder(getActivity())
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.WHITE)
+                .fadeColor(Color.DKGRAY).build();
+            dialog.show();
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Utility.PRODUCTLIST_CATAGORYWISE_URL,
                     new Response.Listener<String>() {
                         @Override
@@ -214,8 +226,9 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
                             System.out.println("res------------->"+response);
                             String res = response+"";
                             if(res.contains("false")){
-                                loading.dismiss();
-                                Toast.makeText(getActivity(), "Record not avilable", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                                //Toast.makeText(getActivity(), "Record not avilable", Toast.LENGTH_SHORT).show();
+                                TastyToast.makeText(getActivity().getApplicationContext(),  "Record not avilable", TastyToast.LENGTH_LONG, TastyToast.INFO);
 
 
                             }else{
@@ -248,6 +261,12 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
                                         objBean.set_RegisteredDisplayAdress(obj.getString("RegisteredBuisnessAdress"));
                                         objBean.set_RegisteredDisplayName(obj.getString("RegisteredBuisnessName"));
                                         objBean.set_state(obj.getString("State"));
+                                        objBean.set_expectedPayout(obj.getString("ExpectedPayout"));
+                                        objBean.set_height(obj.getString("Height"));
+                                        objBean.set_width(obj.getString("Width"));
+                                        objBean.set_length(obj.getString("Length"));
+                                        objBean.set_discount(obj.getString("Discount"));
+
                                         rowcount = Integer.parseInt(obj.getString("rowcount"));
                                         plantArrayList.add(objBean);
                                     }
@@ -257,17 +276,32 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
 
                                 }
                             }
-                            limitstart = limitstart+15;
-                            PlantsAdapter ca = new PlantsAdapter(plantArrayList,getActivity().getApplicationContext(),discount);
-                            ca.setonClickListner(mClicklistner);
-                            recList.setAdapter(ca);
-                            loading.dismiss();
+                            try {
+                                limitstart = limitstart + 15;
+                                PlantsAdapter ca = new PlantsAdapter(plantArrayList, getActivity().getApplicationContext(), discount);
+                                ca.setonClickListner(mClicklistner);
+                                recList.setAdapter(ca);
+                                dialog.dismiss();
+                            }
+                            catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
                         }
+
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                            //Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            try {
+                                TastyToast.makeText(getActivity().getApplicationContext(), error.getMessage(), TastyToast.LENGTH_LONG, TastyToast.ERROR);
+                            }
+                            catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
                         }
                     }){
 
@@ -367,7 +401,7 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
     public void onPlantsItemClick(int position,int groupPosition,int newprice) {
         ProductlistBean obj;
         obj = plantArrayList.get(position);
-        Intent i = new Intent(getActivity(),PlantsGallary.class);
+        Intent i = new Intent(getActivity().getApplicationContext(),PlantsGallary.class);
         Bundle bundle = new Bundle();
         if(newprice>0) {
             obj.set_sellingPrice(newprice+"");
@@ -375,7 +409,7 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
         bundle.putSerializable("PLantsDetail",obj);
 
         i.putExtras(bundle);
-        getActivity().startActivity(i);
+        getActivity().getApplicationContext().startActivity(i);
 
     }
 
@@ -419,53 +453,53 @@ public class ProductListFragment extends Fragment implements onPlantsItemClickLi
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
 
-        String minvalue = data.getStringExtra("minvalue");
-        String maxvalue = data.getStringExtra("maxvalue");
+            String minvalue = data.getStringExtra("minvalue");
+            String maxvalue = data.getStringExtra("maxvalue");
 
 
-        objArraylist = dh.getSelectedProductTypeRecord();
-        limitstart=0;
-        String s ="";
-        if(objArraylist.size()>0)
-        {
+            objArraylist = dh.getSelectedProductTypeRecord();
+            limitstart = 0;
+            String s = "";
+            if (objArraylist.size() > 0) {
 
-            txtFilterBYTexrt.setText("Product Type");
+                txtFilterBYTexrt.setText("Product Type");
 
-            for (int i=0;i<objArraylist.size();i++) {
-                  if(i<objArraylist.size()-1) {
-                      s = s + "'"+objArraylist.get(i)+"'" + ",";
-                  }
-                  else
-                  {
-                      s = s + "'"+objArraylist.get(i)+"'";
-                  }
+                for (int i = 0; i < objArraylist.size(); i++) {
+                    if (i < objArraylist.size() - 1) {
+                        s = s + "'" + objArraylist.get(i) + "'" + ",";
+                    } else {
+                        s = s + "'" + objArraylist.get(i) + "'";
+                    }
 
+                }
+
+                ivRedIndicator.setVisibility(View.VISIBLE);
+                FilterQuery = "and ProductName IN(" + s + ")";
+                FilterPriceQuery = "and (SellingPrice BETWEEN " + minvalue + " And " + maxvalue + ")";
+                System.out.println("!!!!!!!!!!!!!!!!!==========>" + FilterQuery);
+                plantArrayList = new ArrayList<>();
+                FetchProductFromServer(checkedSortItem, "", FilterQuery, FilterPriceQuery, limitstart, limitend);
+            } else {
+                ivRedIndicator.setVisibility(View.GONE);
+                txtFilterBYTexrt.setText("Select");
+                FilterQuery = "";
+                if (minvalue != null && maxvalue != null) {
+                    FilterPriceQuery = "and (SellingPrice BETWEEN " + minvalue + " And " + maxvalue + ")";
+                } else {
+                    FilterPriceQuery = "";
+                }
+
+                System.out.println("filter proce query==========>" + FilterPriceQuery);
+                plantArrayList = new ArrayList<>();
+                FetchProductFromServer(checkedSortItem, "", FilterQuery, FilterPriceQuery, limitstart, limitend);
             }
-
-            ivRedIndicator.setVisibility(View.VISIBLE);
-            FilterQuery = "and ProductName IN("+s+")";
-            FilterPriceQuery = "and (SellingPrice BETWEEN "+minvalue+" And "+maxvalue+")";
-            System.out.println("!!!!!!!!!!!!!!!!!==========>"+FilterQuery);
-            plantArrayList = new ArrayList<>();
-            FetchProductFromServer(checkedSortItem,"",FilterQuery,FilterPriceQuery,limitstart,limitend);
         }
-        else
+        catch (Exception e)
         {
-            ivRedIndicator.setVisibility(View.GONE);
-            txtFilterBYTexrt.setText("Select");
-            FilterQuery = "";
-            if(minvalue!=null&&maxvalue!=null)
-            {
-                FilterPriceQuery = "and (SellingPrice BETWEEN "+minvalue+" And "+maxvalue+")";
-            }
-            else{
-                FilterPriceQuery = "";
-            }
-
-            System.out.println("filter proce query==========>"+FilterPriceQuery);
-            plantArrayList = new ArrayList<>();
-            FetchProductFromServer(checkedSortItem,"",FilterQuery,FilterPriceQuery,limitstart,limitend);
+            e.printStackTrace();
         }
     }
+
 }

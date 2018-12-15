@@ -6,8 +6,8 @@ android {
         applicationId "com.gamla.deepanshu.gamla"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -32,6 +32,8 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-crash:10.2.1'
     implementation 'com.google.firebase:firebase-invites:10.2.1'
+
+    implementation 'com.google.firebase:firebase-config:10.2.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
@@ -55,7 +57,12 @@ dependencies {
     compile 'com.github.hassanusman:CircularDialogs:1.2'
     compile 'com.google.firebase:firebase-messaging:10.2.1'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
-    compile 'com.razorpay:checkout:1.4.8'
+    compile 'com.github.Shashank02051997:FancyAlertDialog-Android:0.1'
+    compile 'com.novoda:merlin:1.1.7'
+    compile 'com.razorpay:checkout:1.4.9'
+    compile 'cc.cloudist.acplibrary:library:1.2.1'
+    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+    compile 'com.sdsmdg.tastytoast:tastytoast:0.1.1'
 
 
 }

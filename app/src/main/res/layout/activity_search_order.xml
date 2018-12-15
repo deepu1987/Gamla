@@ -124,20 +124,30 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_gravity="bottom"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:gravity="bottom"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/searchreset"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="45dp"
 
+            android:background="@color/lightred"
+            android:textColor="@color/white"
+            android:text="Reset"
+            />
         <Button
             android:id="@+id/searchsubmit"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="45dp"
-            android:layout_marginLeft="@dimen/fab_margin"
-            android:layout_marginRight="@dimen/fab_margin"
+
             android:background="@color/colorPrimaryDark"
             android:textColor="@color/white"
             android:text="Submit"
             />
     </LinearLayout>
+
 
 
 </LinearLayout>

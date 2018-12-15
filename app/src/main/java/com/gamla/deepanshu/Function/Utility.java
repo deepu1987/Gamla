@@ -24,11 +24,11 @@ import java.util.List;
 
 public class Utility {
 
-    public static final String BaseURl = "http://10.0.2.2:8080/GamlaHub/rest/GamlaService/";
+    //public static final String BaseURl = "http://10.0.2.2:8080/GamlaHub/rest/GamlaService/";
    // public static final String BaseURl = "http://172.25.141.199:8081/GamlaHub/rest/GamlaService/";
 
 
-   // public static final String BaseURl = "http://www.gamlahub.com/GamlaHub/rest/GamlaService/";
+    public static final String BaseURl = "http://www.gamlahub.com:198/GamlaHub/rest/GamlaService/";
     public static final String PRODUCTLIST_CATAGORYWISE_URL = BaseURl+"ProductListCatagoryWise";
     public static final String CONFIRM_URL = BaseURl+"confirmGamlaUser";
     public static final String LOGIN_URL = BaseURl+"LoginGamla";
@@ -47,6 +47,7 @@ public class Utility {
     public static final String CHECK_ORDER_STAUS = BaseURl+"CheckProductStatus";
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     public static final String ORDERPLACED = "Order Placed";
+    public static final String CHECK_PINCODE =BaseURl+"CheckPincodeAvailableOrNot";
     public static final int TimedOutTimeInMiliSec = 60000;
     public static boolean checkPermission(final Context context)
     {

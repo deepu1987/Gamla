@@ -89,7 +89,8 @@ public class WishListAdapter extends RecyclerView.Adapter<WishListAdapter.WishLi
                 .into(holder.ivImage);
         holder.txtPrice.setText("Rs. "+obj.get_sellingPrice());
         holder.txtname.setText(obj.get_productName());
-        holder.txtadress.setText("by : "+obj.get_RegisteredDisplayName());
+       // holder.txtadress.setText("by : "+obj.get_RegisteredDisplayName());
+        holder.txtadress.setText("by : TrueGarden Agro Pvt. Ltd.");
         holder.txtRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
